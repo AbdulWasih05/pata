@@ -1,22 +1,20 @@
 ---
-title: I fine-tuned a 4B model to tell a courier which parcels will fail before the van leaves
+title: A $2 fine-tune that tells a courier which parcels will fail before the van leaves
 published: false
 tags: devchallenge, hf26challenge, opensource, ai
 cover_image: [TODO: cover image URL]
 ---
 
 <!--
-DRAFT. Every number below comes from eval/results.md, train/RUNS.md or deploy/do_vllm.md.
-Lines marked [TODO] are waiting on a measurement or a human. Delete this comment before publishing.
-Title option with numbers, once gold results are in:
-"A $[cost] fine-tune cut false 'deliverable' calls from [base]% to [tuned]% on Indian and Gulf addresses"
+DRAFT. Numbers come from eval/results.md, train/RUNS.md and DECISIONS.md (D16 to D18).
+Lines marked [TODO] need a human. Delete this comment before publishing.
 -->
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).*
 
 ## What I Built
 
-A courier van leaves the depot with 120 parcels. Somewhere in that pile is "behind Lulu, call before coming", "Bandra West, Mumbai" with no house number, and a cash-on-delivery order whose PIN code points to a different city. Each one is a wasted stop: [TODO: Usman, failed-delivery cost per parcel from experience, stated as experience], plus a return trip, plus a customer who now trusts the shop less.
+A courier van leaves the depot with 120 parcels. Somewhere in that pile is "behind Lulu, call before coming", "Bandra West, Mumbai" with no house number, and a cash-on-delivery order whose PIN code points to a different city. Each one is a wasted stop: the driver's time, a return trip, a COD payment that never gets collected, and a customer who now trusts the shop less.
 
 **Pata** reads the raw address the customer typed, plus the order context (market, cash on delivery or prepaid, whether there is a phone number), and returns a dispatch decision before the van leaves:
 
@@ -40,11 +38,13 @@ For the second one it also writes the call script: *"Hi, this is your courier. C
 
 ## Demo
 
-[TODO: https://<name>.tech]
+[TODO: Render URL]
 
 [TODO: 90 second video: paste three addresses, one per decision; upload a CSV; show a Sentry trace]
 
-You can paste one address or upload a CSV of orders and download it back with a decision column. There is also a CLI: `pata triage --market AE --in orders.csv --out triaged.csv`.
+Paste one address, or upload a CSV of the morning's orders and download it back with a decision column. There is also a CLI: `pata triage --market AE --in orders.csv --out triaged.csv`.
+
+Want your own copy? The repo has a **Deploy to Render** button: one free web service, it asks for a Tinker key (leave it empty to run on rules alone) and an optional Sentry DSN.
 
 ## Code
 
@@ -52,13 +52,13 @@ You can paste one address or upload a CSV of orders and download it back with a 
 
 ## How I Built It
 
-**Rules first.** Before any model, I wrote the decision rules as pure Python functions with tests (`pata/rules.py`, 72 tests across the repo). The rules label the training data and act as the fallback at serve time. Every judgement call beyond the obvious is written down in `DECISIONS.md` (15 so far), for example: an Indian address with no PIN code at all is `CALL_FIRST`, because a courier cannot route it.
+**Rules first.** Before any model, I wrote the decision rules as pure Python functions with tests (`pata/rules.py`, 82 tests across the repo). The rules label the training data and act as the fallback at serve time. Every judgement call is written down in `DECISIONS.md` (19 of them), for example: an Indian address with no PIN code at all is `CALL_FIRST`, because a courier cannot route it.
 
 **Data.**
 
 * India, real: company-registry (MCA) addresses from [gagan1985/indian-addresses-gold](https://huggingface.co/datasets/gagan1985/indian-addresses-gold) and [gagan1985/indian-addresses-raw](https://huggingface.co/datasets/gagan1985/indian-addresses-raw), Apache 2.0. The same datasets also contain bank KYC addresses; I left those out, because they are real customers' homes.
 * India, customer-style: [abr-6024/indian-address-parsing-synthetic](https://huggingface.co/datasets/abr-6024/indian-address-parsing-synthetic), Apache 2.0.
-* UAE: **synthetic.** There is no public dataset of Gulf delivery addresses, so `data/ae_generator.py` generates them from patterns Usman knows from [TODO: Usman, years] of Gulf logistics work: villa and street numbers, Makani numbers, PO Boxes (which cannot be delivered to a door), "behind Lulu", Arabic script and Arabizi, "will share location on WhatsApp", Al Nahda that exists in both Dubai and Sharjah, labour camps. No real customer addresses are in the repo.
+* UAE: **synthetic.** There is no public dataset of Gulf delivery addresses, so `data/ae_generator.py` generates them from patterns my teammate Usman knows from Gulf logistics work: villa and street numbers, Makani numbers, PO Boxes (which cannot be delivered to a door), "behind Lulu", Arabic script and Arabizi, "will share location on WhatsApp", Al Nahda that exists in both Dubai and Sharjah, labour camps. No real customer addresses are in the repo.
 * Registry addresses are cleaner than what customers type, so `data/augment.py` adds customer noise (landmarks, "call me", Hinglish "mandir ke paas", typos, lowercase, missing PIN) and order context (60% COD, some orders without a phone, some with a wrong declared PIN). The target fields are edited along with the text, so the model learns to copy rather than invent.
 * Splits: 3,000 India and 2,966 UAE training conversations, about 1.5M tokens per epoch. India test rows come from whole PIN regions held out of training, so test street and building names are not in the training set.
 
@@ -66,75 +66,95 @@ You can paste one address or upload a CSV of orders and download it back with a 
 
 | Run | Epochs | Tokens trained | Wall time | Cost |
 |---|---|---|---|---|
-| run1 | 3 | 4,528,137 | 19.4 min | [TODO: tinker billing] |
-| run2 | 2 | 3,013,890 | 12.8 min | [TODO: tinker billing] |
+| run1 | 3 | 4,528,137 | 19.4 min | $3.21 |
+| run2 | 2 | 3,013,890 | 12.8 min | $2.14 |
 
-**The run that went wrong.** Run 1's first checkpoint scored worse than I expected on India: 45 parcels that should have been held or called came back `DELIVERABLE`. I read all 45. In 30 of them the model was right and my rules were wrong. "h.no 323, Balaji Heights" and "#743, Gokul Bhavan" were labelled "missing flat number", but the house number *is* the flat. By the end of training, run 1 had learned my bug: 38 genuinely deliverable test addresses came back `CALL_FIRST`. I fixed the rule (with regression tests), which moved 165 training labels, and trained run 2 on the corrected labels for 2 epochs instead of 3. Both runs are scored on the same corrected labels below. A small model trained on rules can still be a useful check on those rules, but only if you read the disagreements.
+Costs are from `tinker billing usage` at the published $0.737 per million training tokens. Everything on Tinker so far, including every eval, came to $6.60.
 
-**Serving.** The LoRA adapter is merged into full Hugging Face weights with the cookbook's `build_hf_model` and served by vLLM on a DigitalOcean GPU Droplet ([TODO: GPU and size]) behind an API key. Exact commands are in `deploy/do_vllm.md`.
+**The run that went wrong.** Run 1's first checkpoint scored worse than I expected on India: 45 parcels that should have been held or called came back `DELIVERABLE`. I read all 45. In 30 of them the model was right and my rules were wrong. "h.no 323, Balaji Heights" and "#743, Gokul Bhavan" were labelled "missing flat number", but the house number *is* the flat. By the end of training, run 1 had learned my bug: 38 genuinely deliverable test addresses came back `CALL_FIRST`. I fixed the rule (with regression tests), which moved 165 training labels, and trained run 2 on the corrected labels for 2 epochs instead of 3. A small model trained on rules can still be a useful check on those rules, but only if you read the disagreements.
+
+**Serving.** The gateway calls the run 2 checkpoint through Tinker's OpenAI-compatible endpoint, so there is no GPU box to run. The same client talks to any vLLM server, and the repo has the merge-and-serve path (`train/export_hf.py`, `deploy/do_vllm.md`) for anyone who wants the weights in-house.
 
 **Gateway.** A FastAPI service on Render (`render.yaml`) serves the page and the API. For every request it computes the rules answer, calls the model, validates the JSON against the pydantic schema, and falls back to the rules if the call fails or the JSON is invalid. The gateway records which one it served.
 
-**Tracing.** Every `/triage` request is a Sentry agent run: `invoke_agent pata` with child spans `execute_tool rules_prelabel`, `chat pata` (model, input and output tokens), `schema.validate`, and `execute_tool rules_fallback` when taken. Customer addresses are personal data, so by default the spans carry lengths, decisions and token counts, not the address text.
+## Sentry: the 6-second requests
 
-[TODO: Sentry section: 2 to 3 trace screenshots from docs/sentry/, the real problem the traces exposed, the fix, before/after numbers]
+Every `/triage` request is a Sentry agent run: `invoke_agent pata` with child spans `execute_tool rules_prelabel`, `chat` (model, provider, input and output tokens), `schema.validate`, and `execute_tool rules_fallback` when taken. Customer addresses are personal data, so the spans carry lengths, decisions, token counts and flags, not the address text.
+
+[TODO: screenshot 1, docs/sentry/: trace list or chat span durations for environment local-hedge-0, showing the two bands]
+
+The first afternoon of traces had a pattern I would not have seen in logs: `chat` spans were either about 1.1 seconds or about 6.1 seconds, almost nothing in between. Token counts were the same in both groups, so it was not the model writing more. I tried streaming (the first token itself arrived late), fresh connections and parallel requests: the extra five seconds stayed. It is a hold on the server side, and it hit 12 of 40 single requests, which is exactly how a dispatcher pastes addresses.
+
+The fix is an old one: a hedged request. If the first call has not answered in 1.5 seconds, the client sends the same request again and keeps whichever answer arrives first (`pata/client.py`, tests in `tests/test_client.py`). The `chat` span now records `pata.hedged` and `pata.hedge_won`, so the trade-off stays visible.
+
+[TODO: screenshot 2, docs/sentry/: environment local-hedge-1500, same view, with pata.hedged on the chat span]
+
+Forty sequential requests through the real gateway, before and after:
+
+| | Hedging off | Hedging on |
+|---|---|---|
+| p50 | 1.09 s | 1.14 s |
+| p90 | 6.16 s | 3.15 s |
+| Mean | 2.63 s | 1.69 s |
+| Requests over 5 s | 12 of 40 | 1 of 40 |
+
+The cost is a second call on slow requests only, at about $0.0002 each.
 
 ## Eval
 
-Held-out test set, base model zero-shot (same system prompt plus a JSON schema hint) against the tuned model. The column that costs money is **false-DELIVERABLE**: of the parcels that should have been held or called first, how many would have gone out on the van.
+**What "gold" means here, honestly.** The rules label the training data, so testing against rule labels mostly checks that the model copied the rules. The test set needs labels from someone else. We did not have time to hand-label 300 rows, so each market's 150 test rows were labelled by a separate Claude agent that saw only the address and the order context, never the rules' answer, the silver label or the code. That is an LLM's judgement, not a dispatcher's, and I treat it as a second opinion rather than ground truth.
 
-[TODO: replace with the gold (hand-checked) table from eval/results.md once data/gold is filled in. Current numbers are on the silver test set, labelled by the rules.]
+The column that costs money is **false-DELIVERABLE**: of the parcels that should have been held or called first, how many would have gone out on the van.
 
-**India** (590 test addresses, silver labels)
+**India** (150 test addresses)
 
-| System | Valid JSON | Accuracy | False-DELIVERABLE | Building field | Area field |
+| System | Valid JSON | Accuracy | False-DELIVERABLE | Building field | Area field | p50 latency |
+|---|---|---|---|---|---|---|
+| Qwen3.5-4B base, zero-shot | 85.3% | 43.3% | 26.4% (28/106) | 52.3% | 76.6% | 1.07 s |
+| Rules alone | n/a | 86.7% | 8.5% (9/106) | 47.3% | 14.0% | 0 s |
+| **Pata, tuned 4B (run 2)** | **100%** | **86.0%** | 10.4% (11/106) | **89.3%** | **87.3%** | 1.15 s |
+
+**UAE** (150 synthetic test addresses)
+
+| System | Valid JSON | Accuracy | False-DELIVERABLE | Building field | p50 latency |
 |---|---|---|---|---|---|
-| Qwen3.5-4B base, zero-shot | 87.1% | 61.0% | 29.4% (86/293) | 51.9% | 78.0% |
-| Pata, tuned 4B (run 2) | 100% | 94.9% | 4.4% (13/293) | 92.7% | 88.0% |
+| Qwen3.5-4B base, zero-shot | 82.0% | 25.3% | 0.0% (0/77) | 74.0% | 1.07 s |
+| Rules alone | n/a | 84.7% | 0.0% (0/77) | 92.0% | 0 s |
+| **Pata, tuned 4B (run 2)** | **100%** | **85.3%** | 0.0% (0/77) | **100%** | 1.13 s |
 
-**Why a model, if rules make the labels?** Decisions are only half the output. The same rules that label decisions get 41.7% of India building fields and 10.5% of area fields right; the tuned model gets 92.7% and 88.0%, because it learned field boundaries from the human-labelled gold spans rather than from regexes. Rules also cannot read an address they have no pattern for, and the model generalised past one of my rule bugs (see the run that went wrong).
+What this says:
 
-**UAE** (334 synthetic test addresses, silver labels)
+* **Fine-tuning doubled decision accuracy** over the same model zero-shot (43% to 86% India, 25% to 85% UAE), and took valid JSON from 85% (India) and 82% (UAE) to 100%.
+* **On decisions, the tuned model matches the rules it learned from,** within a point. That is expected, and it is not the reason the model exists.
+* **The reason is the fields.** On India, the rules find the building in 47% of addresses and the area in 14%; the tuned model gets 89% and 87%, because it learned field boundaries from human span labels in the registry data rather than from my regexes. A driver needs "Flat 14, Balaji Heights, Kondapur", not just "DELIVERABLE".
+* The base model's 0% false-DELIVERABLE on UAE is not caution, it is a habit: it answers `CALL_FIRST` for almost everything, including 50 of 73 addresses that were fine.
 
-| System | Valid JSON | Accuracy | False-DELIVERABLE | Building field |
-|---|---|---|---|---|
-| Qwen3.5-4B base, zero-shot | 79.3% | 33.2% | 1.5% (3/196) | 71.3% |
-| Pata, tuned 4B (run 2) | 100% | 99.4% | 1.0% (2/196) | 100% |
-
-The base model's low UAE false-DELIVERABLE rate is not a strength: it answers `CALL_FIRST` for almost everything, including 96 of 138 addresses that were fine. The tuned model's invalid-answer rate is zero on both sets, so the rules fallback never fired in this eval.
-
-Serving latency on the Droplet: [TODO: p50 for a ~300 token prompt, tokens/sec from vLLM logs].
+**Where the reviewer disagreed with my rules.** Both the rules and the tuned model disagree with the blind reviewer on about 1 row in 7. The review found two places where my rules are stricter than a dispatcher would be. `MIXED_SCRIPT` sends every Arabic-script address to `CALL_FIRST`, even "Flat 328, بناية الشمس, Al Karama, Dubai", where building, flat and area are all clear. And I treat Al Quoz and Khalifa City as ambiguous without a sub-area, even when a warehouse and plot number are given. I did not change the rules and retrain after seeing this, because that would tune the model to its own test set. They are the first fixes for the next run.
 
 ## Why Does Open Innovation Matter?
 
-1. **Customer addresses stay on the courier's own machine.** An address plus a phone number plus "cash on delivery" is exactly the data you should not be sending to a third party per parcel. With open weights the model runs on a box the courier controls.
-2. **Per-parcel cost.** [TODO: arithmetic for 10,000 parcels a month: Droplet hourly price x hours, divided by parcels, against a hosted API at the measured ~[input] + [output] tokens per parcel.]
-3. **You cannot fine-tune a closed API on Gulf address quirks.** "Al Nahda" without an emirate, a Makani number, a PO Box that is not a door: the base model got 33% of the UAE test set right. Two short LoRA runs got it to 99% on our synthetic set.
-4. **No pricing lock-in.** The weights, the data generator and the rules are all in the repo. A courier can retrain on its own 10,000 historical orders without asking anyone.
+1. **Per-parcel cost.** A triage call is about 130 input and 135 output tokens. At Tinker's published sampling rates ($0.33 per million prefill, $1.005 per million sampled) that is about $0.00018 a parcel, or **$1.80 for 10,000 parcels a month**, plus the occasional hedged second call. Training it cost $2.14.
+2. **You cannot fine-tune a closed API on Gulf address quirks.** "Al Nahda" without an emirate, a Makani number, a PO Box that is not a door: the base model got 25% of the UAE test set right. One $2 LoRA run got it to 85% against an independent reviewer.
+3. **Customer addresses can stay in-house.** An address plus a phone number plus "cash on delivery" is data you should not hand to a third party per parcel. The demo calls Tinker for convenience, but the weights are open: merge them (`train/export_hf.py`) and serve them with vLLM on a box the courier controls. The gateway does not change.
+4. **No lock-in.** The rules, the data generator, the training script and the eval are all in the repo. A courier can retrain on its own 10,000 historical orders without asking anyone.
 
 ## My Agent Session
 
 [TODO: Wasih, DevRelay session embed, or remove this section]
 
-## My First User
-
-[TODO: Usman, if a courier or seller runs 20 of their own addresses before Monday, write what they said and what they asked for next. Otherwise remove this section.]
-
 ## Honest limitations
 
-* **The UAE data is synthetic.** It comes from real patterns, but it is generated, and the generator was checked against the same rules that label it. That is why the UAE silver numbers look nearly perfect and why the hand-checked set matters more. [TODO: gold UAE numbers]
-* **Labels are silver.** They come from rules, and the rules had at least one real bug that I found only because the model disagreed. There may be others. [TODO: agreement rate between rules and human hand-checks]
-* **No geocoding.** Pata never checks that "Marina Pinnacle Tower" exists in Dubai Marina. A real gazetteer lookup is the obvious next tool.
-* **Field extraction is imperfect.** For "H.No 45, MG Road" the model put the house number in `unit` instead of `building`. Area extraction on India is [TODO: field_area from gold]%.
-* **Arabic script.** [TODO: quantify from gold: accuracy on Arabic and Arabizi rows]
+* **The gold labels are an LLM's, not a dispatcher's.** They are independent of my rules, which is what the test needs, but they are not field truth. Real delivery outcomes would be better than both.
+* **The UAE data is synthetic.** It comes from real patterns, but it is generated, and the generator was checked against the same rules that label it.
+* **The rules are too strict in two known places** (Arabic script, large areas with sub-areas). The model inherited both.
+* **The demo depends on Tinker's OpenAI-compatible endpoint,** which Tinker describes as a beta for testing and low traffic. A busy courier should run the merged weights on vLLM.
+* **No geocoding.** Pata never checks that "Marina Pinnacle Tower" exists in Dubai Marina. A gazetteer lookup is the obvious next tool.
 * **What a real courier's data would change:** 10,000 historical orders with their actual delivery outcomes would replace rule labels with ground truth. That is the first thing I would ask a paying customer for.
 
 ## Prize Categories
 
-* **Best Use of Tinker:** two LoRA SFT runs of Qwen3.5-4B on Tinker, base vs tuned on the same held-out set in the Eval section, run IDs and cost in `train/RUNS.md`.
-* **Best Use of DigitalOcean:** the tuned model is served with vLLM on a GPU Droplet; spec, launch command and throughput in `deploy/do_vllm.md`. [TODO]
-* **Best Use of Render:** the gateway and UI run on Render from `render.yaml`. [TODO: live URL]
-* **Best Use of Sentry Agent Tracing:** every request is traced as an agent run; the Sentry section shows the traces, the problem they exposed, and the fix. [TODO]
-* **Best Use of a .tech Domain:** Pata lives at [TODO: domain].
+* **Best Use of Tinker:** two LoRA SFT runs of Qwen3.5-4B ($3.21 and $2.14), base vs tuned on the same held-out set in the Eval section, the failed run and what it taught me, run IDs and costs in `train/RUNS.md`. The live demo is served from the Tinker checkpoint.
+* **Best Use of Render:** the gateway and UI run on Render from a one-click `render.yaml` blueprint; anyone can deploy their own copy with the button in the README.
+* **Best Use of Sentry Agent Tracing:** every request is traced as an agent run; the traces exposed the 6-second requests, and the hedging fix cut p90 latency from 6.16 s to 3.15 s.
 
-Built with [TODO: Usman's DEV handle].
+Built by Abdul Wasih and Usman.
