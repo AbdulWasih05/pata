@@ -13,6 +13,7 @@ False-DELIVERABLE rate: share of parcels that should not ship as-is (gold CALL_F
 | rules only | 150 | 100.0% | 86.7% | 86.7% | 0.870 | 8.5% (9/106) | 47.3% | 14.0% | 100.0% | 0 ms |
 | Pata, tuned 4B (run 2) | 150 | 100.0% | 86.0% | 86.0% | 0.864 | 10.4% (11/106) | 89.3% | 87.3% | 100.0% | 1151 ms |
 | Qwen3.5-4B base, zero-shot | 150 | 85.3% | 43.3% | 56.0% | 0.376 | 26.4% (28/106) | 52.3% | 76.6% | 93.8% | 1074 ms |
+| Qwen3.5-397B-A17B, zero-shot | 150 | 86.0% | 46.7% | 58.0% | 0.444 | 7.5% (8/106) | 61.2% | 84.5% | 93.8% | 2622 ms |
 
 ### AE
 
@@ -21,6 +22,7 @@ False-DELIVERABLE rate: share of parcels that should not ship as-is (gold CALL_F
 | rules only | 150 | 100.0% | 84.7% | 84.7% | 0.840 | 0.0% (0/77) | 92.0% | 94.7% | 100.0% | 0 ms |
 | Pata, tuned 4B (run 2) | 150 | 100.0% | 85.3% | 85.3% | 0.847 | 0.0% (0/77) | 100.0% | 100.0% | 100.0% | 1130 ms |
 | Qwen3.5-4B base, zero-shot | 150 | 82.0% | 25.3% | 40.0% | 0.219 | 0.0% (0/77) | 74.0% | 73.2% | 100.0% | 1072 ms |
+| Qwen3.5-397B-A17B, zero-shot | 150 | 90.7% | 56.7% | 65.3% | 0.599 | 1.3% (1/77) | 91.2% | 89.0% | 100.0% | 2852 ms |
 
 ## Test set: silver (rules-labelled)
 
@@ -63,3 +65,4 @@ False-DELIVERABLE rate: share of parcels that should not ship as-is (gold CALL_F
 * 2026-10-17 19:46 UTC `rules only`: rules on gold (blind review, not rules) agreement between the rules and the blind reviewer
 * 2026-10-17 19:47 UTC `Pata, tuned 4B (run 2)`: http:tinker://66ebff6a-2896-584d-9189-64032bad9b83:train:0/sampler_weights/final on gold (blind review, not rules) served through Tinker's OpenAI-compatible endpoint, as on Render
 * 2026-10-17 19:48 UTC `Qwen3.5-4B base, zero-shot`: http:Qwen/Qwen3.5-4B on gold (blind review, not rules) same system prompt plus JSON schema hint, thinking off, via Tinker OpenAI-compatible endpoint
+* 2026-10-17 20:38 UTC `Qwen3.5-397B-A17B, zero-shot`: http:Qwen/Qwen3.5-397B-A17B on gold (blind review, not rules) same family, about 100x the parameters; same prompt plus schema hint, thinking off, via Tinker OpenAI-compatible endpoint

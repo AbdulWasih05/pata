@@ -41,6 +41,7 @@ class TriageResult:
     model: str | None = None
     input_tokens: int = 0
     output_tokens: int = 0
+    hedged: bool = False
 
     def as_dict(self) -> dict:
         return {
@@ -52,6 +53,7 @@ class TriageResult:
             "model": self.model,
             "input_tokens": self.input_tokens,
             "output_tokens": self.output_tokens,
+            "hedged": self.hedged,
         }
 
 
@@ -143,6 +145,7 @@ async def triage(inp: TriageInput, client: ModelClient | None) -> TriageResult:
         model=comp.model if comp else None,
         input_tokens=comp.input_tokens if comp else 0,
         output_tokens=comp.output_tokens if comp else 0,
+        hedged=comp.hedged if comp else False,
     )
 
 

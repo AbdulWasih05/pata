@@ -110,7 +110,7 @@ def _write_handcheck(market: str, rows: list[dict]) -> None:
             inp, out = r["input"], r["output"]
             w.writerow({
                 "id": r["id"],
-                "reviewer": "Wasih" if i % 2 == 0 else "Usman",
+                "reviewer": "",
                 "raw_address": inp["raw_address"],
                 "phone_present": inp["phone_present"],
                 "payment": inp["payment"],

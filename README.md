@@ -2,7 +2,7 @@
 
 Dispatch triage for couriers. Pata reads a raw customer address plus order context and returns a decision before the van leaves: `DELIVERABLE`, `CALL_FIRST`, or `LIKELY_FAIL`, with normalised fields, a one-line driver note, and the reason.
 
-Entry for the DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. Built by Abdul Wasih and Usman.
+Entry for the DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. Built by Abdul Wasih (@iamwasih).
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AbdulWasih05/pata)
 

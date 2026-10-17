@@ -58,7 +58,7 @@ Want your own copy? The repo has a **Deploy to Render** button: one free web ser
 
 * India, real: company-registry (MCA) addresses from [gagan1985/indian-addresses-gold](https://huggingface.co/datasets/gagan1985/indian-addresses-gold) and [gagan1985/indian-addresses-raw](https://huggingface.co/datasets/gagan1985/indian-addresses-raw), Apache 2.0. The same datasets also contain bank KYC addresses; I left those out, because they are real customers' homes.
 * India, customer-style: [abr-6024/indian-address-parsing-synthetic](https://huggingface.co/datasets/abr-6024/indian-address-parsing-synthetic), Apache 2.0.
-* UAE: **synthetic.** There is no public dataset of Gulf delivery addresses, so `data/ae_generator.py` generates them from patterns my teammate Usman knows from Gulf logistics work: villa and street numbers, Makani numbers, PO Boxes (which cannot be delivered to a door), "behind Lulu", Arabic script and Arabizi, "will share location on WhatsApp", Al Nahda that exists in both Dubai and Sharjah, labour camps. No real customer addresses are in the repo.
+* UAE: **synthetic.** There is no public dataset of Gulf delivery addresses, so `data/ae_generator.py` generates them from common Gulf delivery-address patterns: villa and street numbers, Makani numbers, PO Boxes (which cannot be delivered to a door), "behind Lulu", Arabic script and Arabizi, "will share location on WhatsApp", Al Nahda that exists in both Dubai and Sharjah, labour camps. No real customer addresses are in the repo.
 * Registry addresses are cleaner than what customers type, so `data/augment.py` adds customer noise (landmarks, "call me", Hinglish "mandir ke paas", typos, lowercase, missing PIN) and order context (60% COD, some orders without a phone, some with a wrong declared PIN). The target fields are edited along with the text, so the model learns to copy rather than invent.
 * Splits: 3,000 India and 2,966 UAE training conversations, about 1.5M tokens per epoch. India test rows come from whole PIN regions held out of training, so test street and building names are not in the training set.
 
@@ -157,4 +157,4 @@ What this says:
 * **Best Use of Render:** the gateway and UI run on Render from a one-click `render.yaml` blueprint; anyone can deploy their own copy with the button in the README.
 * **Best Use of Sentry Agent Tracing:** every request is traced as an agent run; the traces exposed the 6-second requests, and the hedging fix cut p90 latency from 6.16 s to 3.15 s.
 
-Built by Abdul Wasih and Usman.
+Built by Abdul Wasih (@iamwasih).
