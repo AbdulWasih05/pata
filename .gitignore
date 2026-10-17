@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+# Large or regenerable data. Gold sets and small splits are committed.
+data/raw/
+data/cache/
+train/out/
+*.safetensors
