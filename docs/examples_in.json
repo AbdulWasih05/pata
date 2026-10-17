@@ -1,0 +1,6 @@
+[
+  {"market": "AE", "raw_address": "Flat 1203, Marina Pinnacle Tower, Dubai Marina", "phone_present": true, "payment": "COD"},
+  {"market": "AE", "raw_address": "behind Lulu Hypermarket Al Barsha, call before coming", "phone_present": true, "payment": "COD"},
+  {"market": "IN", "raw_address": "H.No 45, MG Road, Bengaluru 560001", "phone_present": true, "payment": "PREPAID", "declared_pincode": "110001"},
+  {"market": "IN", "raw_address": "hanuman mandir ke paas, Kothrud, Pune 411038", "phone_present": false, "payment": "COD"}
+]

@@ -3,10 +3,10 @@
     uv run python -m eval.run_eval --checkpoint rules
     uv run python -m eval.run_eval --checkpoint base                  # zero-shot Qwen3.5-4B (Linux)
     uv run python -m eval.run_eval --checkpoint tinker://<run>/...    # tuned, via Tinker (Linux)
-    uv run python -m eval.run_eval --checkpoint https://<droplet>/    # served model (vLLM)
+    uv run python -m eval.run_eval --checkpoint https://<host>/v1    # OpenAI-compatible endpoint
 
-Test set: the human hand-checked gold rows (data/gold/*_handcheck.csv, gold_decision filled)
-when there are any; otherwise the silver test split, and the table says so.
+Test set: the independently reviewed gold rows (data/gold/*_handcheck.csv) when
+any are filled; otherwise the silver test split, and the table says so.
 
 Every run is appended to eval/results.jsonl; eval/results.md is regenerated from it, so numbers
 in the post always trace back to a logged run.
@@ -25,7 +25,9 @@ from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 
-from pata.client import ModelClient
+import httpx
+
+from pata.client import ModelClient, default_api_key
 from pata.prompt import build_messages, parse_output
 from pata.rules import triage as rules_triage
 from pata.schema import Decision, TriageInput, TriageOutput
@@ -57,8 +59,8 @@ def load_test(split: str) -> tuple[list[dict], str]:
                     gold.append(r)
     if split == "gold" or (split == "auto" and gold):
         if not gold:
-            raise SystemExit("no hand-checked rows yet; use --split silver")
-        return gold, "gold (hand-checked)"
+            raise SystemExit("no reviewed gold rows yet; use --split silver")
+        return gold, "gold (blind review, not rules)"
     for r in rows.values():
         r["gold_decision"] = r["output"]["decision"]
     return list(rows.values()), "silver (rules-labelled)"
@@ -89,13 +91,22 @@ class RulesBackend(Backend):
 
 class HttpBackend(Backend):
     def __init__(self, url: str, schema_hint: bool):
-        self.client = ModelClient(url, os.environ.get("DO_VLLM_API_KEY"),
-                                  os.environ.get("PATA_MODEL", "pata"), schema_hint=schema_hint)
+        # Generous limits: a hosted baseline may reason before it answers.
+        self.client = ModelClient(url, default_api_key(url), os.environ.get("PATA_MODEL", "pata"),
+                                  schema_hint=schema_hint, max_tokens=4096, timeout=180.0)
         self.name = f"http:{self.client.model}"
 
     async def predict(self, inp):
-        c = await self.client.complete(build_messages(inp, schema_hint=self.client.schema_hint))
-        return c.text, c.latency_ms
+        msgs = build_messages(inp, schema_hint=self.client.schema_hint)
+        # Retry rate limits and provider overloads, so they are not scored as model errors.
+        for wait in (5, 15, 45, 90, None):
+            try:
+                c = await self.client.complete(msgs)
+                return c.text, c.latency_ms
+            except httpx.HTTPStatusError as e:
+                if wait is None or e.response.status_code not in (429, 500, 502, 503, 504):
+                    raise
+                await asyncio.sleep(wait)
 
     async def aclose(self):
         await self.client.aclose()
@@ -313,6 +324,8 @@ async def amain(args: argparse.Namespace) -> None:
     label = args.label or backend_name
     OUT.mkdir(parents=True, exist_ok=True)
     safe = "".join(c if c.isalnum() or c in "-_." else "_" for c in label)
+    if test_set.startswith("gold"):
+        safe += "__gold"  # silver and gold runs of the same system keep separate files
     if not args.rescore:  # keep the original predictions file untouched
         with (OUT / f"{safe}.jsonl").open("w", encoding="utf-8") as fh:
             for p in preds:

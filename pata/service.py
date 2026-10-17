@@ -84,7 +84,7 @@ async def triage(inp: TriageInput, client: ModelClient | None) -> TriageResult:
                 with sentry_sdk.start_span(op="gen_ai.chat", name=f"chat {client.model}") as s:
                     s.set_data("gen_ai.operation.name", "chat")
                     s.set_data("gen_ai.agent.name", AGENT)
-                    s.set_data("gen_ai.provider.name", "vllm")
+                    s.set_data("gen_ai.provider.name", getattr(client, "provider", "vllm"))
                     s.set_data("gen_ai.request.model", client.model)
                     s.set_data("gen_ai.request.temperature", 0.0)
                     s.set_data("gen_ai.request.max_tokens", client.max_tokens)
@@ -97,6 +97,8 @@ async def triage(inp: TriageInput, client: ModelClient | None) -> TriageResult:
                     s.set_data("gen_ai.usage.output_tokens", comp.output_tokens)
                     s.set_data("gen_ai.usage.total_tokens", comp.input_tokens + comp.output_tokens)
                     s.set_data("gen_ai.response.finish_reasons", [comp.finish_reason])
+                    s.set_data("pata.hedged", comp.hedged)
+                    s.set_data("pata.hedge_won", comp.hedge_won)
                     if _send_prompts():
                         s.set_data("gen_ai.output.messages", comp.text)
             except Exception as e:  # network, timeout, HTTP error: rules take over
@@ -130,6 +132,7 @@ async def triage(inp: TriageInput, client: ModelClient | None) -> TriageResult:
         if comp is not None:
             agent.set_data("gen_ai.usage.input_tokens", comp.input_tokens)
             agent.set_data("gen_ai.usage.output_tokens", comp.output_tokens)
+            agent.set_data("pata.hedged", comp.hedged)
 
     return TriageResult(
         output=out,

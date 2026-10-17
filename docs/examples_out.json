@@ -1,0 +1,126 @@
+[
+  {
+    "input": {
+      "market": "AE",
+      "raw_address": "Flat 1203, Marina Pinnacle Tower, Dubai Marina",
+      "phone_present": true,
+      "payment": "COD"
+    },
+    "output": {
+      "decision": "DELIVERABLE",
+      "confidence": 0.9,
+      "reason_codes": [
+        "OK"
+      ],
+      "normalised": {
+        "country": "AE",
+        "admin1": "Dubai",
+        "city": "Dubai",
+        "area": "Dubai Marina",
+        "street": "",
+        "building": "Marina Pinnacle Tower",
+        "unit": "Flat 1203",
+        "landmark": "",
+        "postcode": null,
+        "makani": null,
+        "po_box": null
+      },
+      "driver_note": "Go to Flat 1203, Marina Pinnacle Tower, Dubai Marina.",
+      "call_script": null
+    }
+  },
+  {
+    "input": {
+      "market": "AE",
+      "raw_address": "behind Lulu Hypermarket Al Barsha, call before coming",
+      "phone_present": true,
+      "payment": "COD"
+    },
+    "output": {
+      "decision": "CALL_FIRST",
+      "confidence": 0.76,
+      "reason_codes": [
+        "LANDMARK_ONLY",
+        "COD_HIGH_RISK"
+      ],
+      "normalised": {
+        "country": "AE",
+        "admin1": "Dubai",
+        "city": "Dubai",
+        "area": "Al Barsha",
+        "street": "",
+        "building": "",
+        "unit": "",
+        "landmark": "behind Lulu Hypermarket",
+        "postcode": null,
+        "makani": null,
+        "po_box": null
+      },
+      "driver_note": "Call customer before dispatch: landmark only; COD on weak address.",
+      "call_script": "Hi, this is your courier. Could you confirm your building or house number? Payment is cash on delivery."
+    }
+  },
+  {
+    "input": {
+      "market": "IN",
+      "raw_address": "H.No 45, MG Road, Bengaluru 560001",
+      "phone_present": true,
+      "payment": "PREPAID",
+      "declared_pincode": "110001"
+    },
+    "output": {
+      "decision": "LIKELY_FAIL",
+      "confidence": 0.78,
+      "reason_codes": [
+        "PINCODE_MISMATCH"
+      ],
+      "normalised": {
+        "country": "IN",
+        "admin1": "Karnataka",
+        "city": "Bengaluru",
+        "area": "",
+        "street": "MG Road",
+        "building": "",
+        "unit": "45",
+        "landmark": "",
+        "postcode": "560001",
+        "makani": null,
+        "po_box": null
+      },
+      "driver_note": "Hold: PIN does not match.",
+      "call_script": null
+    }
+  },
+  {
+    "input": {
+      "market": "IN",
+      "raw_address": "hanuman mandir ke paas, Kothrud, Pune 411038",
+      "phone_present": false,
+      "payment": "COD"
+    },
+    "output": {
+      "decision": "LIKELY_FAIL",
+      "confidence": 0.94,
+      "reason_codes": [
+        "LANDMARK_ONLY",
+        "COD_HIGH_RISK",
+        "NO_PHONE"
+      ],
+      "normalised": {
+        "country": "IN",
+        "admin1": "Maharashtra",
+        "city": "Pune",
+        "area": "Kothrud",
+        "street": "",
+        "building": "",
+        "unit": "",
+        "landmark": "hanuman mandir ke paas",
+        "postcode": "411038",
+        "makani": null,
+        "po_box": null
+      },
+      "driver_note": "Hold: landmark only; COD on weak address; no phone to call.",
+      "call_script": null
+    }
+  }
+]

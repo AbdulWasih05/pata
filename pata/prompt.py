@@ -46,7 +46,7 @@ def target_text(out: TriageOutput) -> str:
     return _dumps(out.model_dump(mode="json"))
 
 
-_THINK = re.compile(r"<think>.*?</think>", re.S)
+_THINK = re.compile(r"<(think|thought)>.*?</\1>", re.S)  # Qwen and Gemma reasoning blocks
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$")
 
 

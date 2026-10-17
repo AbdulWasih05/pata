@@ -1,151 +1,151 @@
 id,reviewer,raw_address,phone_present,payment,declared_pincode,city_hint,silver_decision,silver_reasons,gold_decision,notes
-ae-002693,Wasih,Office 205 Al Yasmeen Bldg Mohammed Bin Zayed City AUH,True,PREPAID,,,DELIVERABLE,OK,,
-ae-002296,Usman,"musaffah, abu dhabi, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000785,Wasih,"Flat 328, بناية الشمس, Al Karama, Dubai",True,PREPAID,,Dxb,CALL_FIRST,MIXED_SCRIPT,,
-ae-002023,Usman,"Villa 53, Street 70, Mohammed Bin Zayed City",True,PREPAID,,ABU DHABI,DELIVERABLE,OK,,
-ae-002622,Wasih,"the greens, dxb, 0526308739",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-001916,Usman,"flat 4006, al bustan heights, town square, whatsapp me for location, dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-001643,Wasih,"Room 77,  Oasis Builders Staff Accommodation,  Jebel Ali Industrial 3,  Dubai",True,COD,,,DELIVERABLE,OK,,
-ae-001898,Usman,sharjah uae mob 0542758896,True,COD,,Sharjah,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000375,Wasih,"fela 91, shar3 67, ganb el ba2ala, al ras, dubai",True,PREPAID,,Dubai,CALL_FIRST,MIXED_SCRIPT,,
-ae-003025,Usman,"room 75, camp 26, sonapur, dubai",True,PREPAID,,dubai,DELIVERABLE,OK,,
-ae-000096,Wasih,"Dubai Investments Park, Dubai",True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000315,Usman,مقابل الجمعية التعاونية، البرشاء، دبي,True,PREPAID,,,CALL_FIRST,LANDMARK_ONLY,,
-ae-003449,Wasih,apt 305 horizon residence al mankhool road al barsha 1 dubai,True,COD,,,DELIVERABLE,OK,,
-ae-000260,Usman,JBR,True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000841,Wasih,"Villa 54, Tripoli St, Al Nahda",True,COD,,,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,,
-ae-000565,Usman,"villa 38, street 75, saadiyat island",True,PREPAID,,,DELIVERABLE,OK,,
-ae-000744,Wasih,"al furjan, dxb, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-001914,Usman,"villa 77, street 92a, al rigga, pls call on arrival, dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-001520,Wasih,"Villa 61, Street 74, Jumeirah 1",True,PREPAID,,DUBAI,DELIVERABLE,OK,,
-ae-002719,Usman,"Al Muhaisnah, Dubai, mob 0545926090",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-003256,Wasih,"beside Emarat petrol station, Jebel Ali",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-001462,Usman,"Warehouse 38, Plot 447-767, Street 80, Al Quoz Industrial 2, DXB",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002270,Wasih,"The Greens, Dubai, mob 0588765996",True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-002585,Usman,"behind Mashreq ATM, Business Bay, Dxb",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-002094,Wasih,"Flat 2519, Al Reef Residence, University City, Sharjah, mob 0527028642",True,COD,,,DELIVERABLE,OK,,
-ae-001267,Usman,"pobox 34852 , al khalidiyah , abu dhabi",True,COD,,Abu Dhabi,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-000023,Wasih,"Villa 52, شارع 75, Discovery Gardens, Dubai",True,PREPAID,,DUBAI,CALL_FIRST,MIXED_SCRIPT,,
-ae-000030,Usman,فيلا 74، شارع 93، ديرة، دبي، 0542083082,True,COD,,Dxb,DELIVERABLE,OK,,
-ae-000827,Wasih,"cral bay residence , muwaileh , sharjah",False,PREPAID,,,LIKELY_FAIL,MISSING_UNIT NO_PHONE,,
-ae-002019,Usman,"Flat 358, بناية الشمس, Al Jazzat, Sharjah",True,COD,,sharjah,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-001755,Wasih,"Flat 1104, Al Reef Tower, Deira",False,COD,,DUBAI,DELIVERABLE,OK,,
-ae-000191,Usman,Tourist Club Area Abu Dhabi,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000893,Wasih,"Villa 60, Tripoli Street, JVT, whatsapp me for location, Dubai",True,PREPAID,,dubai,CALL_FIRST,CALL_REQUESTED,,
-ae-001964,Usman,"Villa 53, Street 90, Al Majaz, Makani No. 44190 81298, 0558134367",True,PREPAID,,,DELIVERABLE,OK,,
-ae-000995,Wasih,dubai south dxb,True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-001540,Usman,3mara 28 sha2a 40 ganb el ba2ala saadiyat island,True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,,
-ae-003085,Wasih,"office 1614 ,  coral bay tower ,  town square ,  dubai",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002857,Usman,bur dubai dubai,True,PREPAID,,dubai,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-002783,Wasih,"Flat 590, بناية الشمس, Al Yarmook, Sharjah, mob 0528792246",True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-000515,Usman,"shop 43 , plot 682-692 , st 93 , al quoz industrial 3 , dxb",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002739,Wasih,P.O. Box 74709 Sonapur Dubai,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-002869,Usman,"beside Union Coop, Al Satwa, Dxb, mob 0503170258",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-002829,Wasih,Villa 13 Street 83 Muwaileh Sharjah,True,PREPAID,,,DELIVERABLE,OK,,
-ae-002700,Usman,"International City, Dubai, deliver fast",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-002184,Wasih,Villa 49 97th Street Khalifa City Abu Dhabi,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,,
-ae-000551,Usman,Apt 2103 Al Bustan Bldg Al Yarmook Shj,True,PREPAID,,,DELIVERABLE,OK,,
-ae-000380,Wasih,"pobox 93672, dubai",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001723,Usman,Flat 233 Horizon Tower Al Qusais Dubai,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,,
-ae-000292,Wasih,"Room 58, Camp 6, Al Muhaisnah, Dubai",True,COD,,Dubai,DELIVERABLE,OK,,
-ae-000745,Usman,Karama,True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-001058,Wasih,villa 25 64th street al barsha 3 whatsapp me for location dubai,True,PREPAID,,,CALL_FIRST,CALL_REQUESTED,,
-ae-000721,Usman,"flat 2612,  opal tower,  al barsha 1,  dubai,  0528457619",True,COD,,Dubai,DELIVERABLE,OK,,
-ae-001671,Wasih,"Dubai, UAE",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-002478,Usman,"in front of Mashreq ATM, Downtown Dubai, Dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-000749,Wasih,"Room 211, Camp 5, Musaffah, Abu Dhabi",True,COD,,abu dhabi,DELIVERABLE,OK,,
-ae-001103,Usman,"University City, Sharjah, my home, +971 58 805 0390",True,COD,,SHARJAH,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000682,Wasih,Warehouse 3 Plot 452 Cairo Street Al Quoz Dubai,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,,
-ae-001083,Usman,"Office 2139, Opal Building, Jumeirah, Dubai, PO Box 27473, 0561600351",True,PREPAID,,DUBAI,DELIVERABLE,OK,,
-ae-002373,Wasih,jvc,True,PREPAID,,Dxb,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-002051,Usman,"Villa 26 ,  Al Mankhool Road ,  Dubai Investments Park ,  call before coming ,  Dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-002792,Wasih,"office 1718, horizon building, al ras, dxb, p.o box 58958",True,COD,,DUBAI,DELIVERABLE,OK,,
-ae-000976,Usman,P.O. Box 39345 Bur Dubai Dubai,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001249,Wasih,"Flat 218, بناية الياسمين, Al Taawun, Sharjah",True,COD,,SHARJAH,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-002518,Usman,"Room 143, Camp 22, Musaffah, AUH",True,COD,,abu dhabi,DELIVERABLE,OK,,
-ae-002077,Wasih,"Tourist Club Area, Abu Dhabi, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000818,Usman,"Warehouse 18, Plot 597, Street 76a, Al Quoz, Dubai",True,COD,,dubai,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,,
-ae-001865,Wasih,"Room 48 , Camp 13 , Al Muhaisnah , Dubai",True,COD,,,DELIVERABLE,OK,,
-ae-000395,Usman,"Al Barsha 3, Dubai, my home",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000333,Wasih,"Villa 8, Street 69, Al Barsha South, whatsapp me for location, Dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-001305,Usman,"flat 1901, al yasmeen tower, yas island, auh, mob 0508591052",True,PREPAID,,,DELIVERABLE,OK,,
-ae-000726,Wasih,muwaileh sharjah,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000107,Usman,"Hoorizon Heights, Al Shamkha, 0589634538",True,PREPAID,,,CALL_FIRST,MISSING_UNIT,,
-ae-001280,Wasih,room 68 camp 26 jebel ali dxb,True,PREPAID,,dubai,DELIVERABLE,OK,,
-ae-001800,Usman,"Musaffah ,  Abu Dhabi",False,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-001624,Wasih,"near delhi private school,  al barsha south,  dxb,  0589638547",True,PREPAID,,Dxb,CALL_FIRST,LANDMARK_ONLY,,
-ae-001785,Usman,"Apt 310, Opal Tower, Street 97b, Karama, Dubai",True,COD,,,DELIVERABLE,OK,,
-ae-001665,Wasih,"p.o box 38097, dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001104,Usman,beside Emarat petrol station Al Nuaimiya Ajman,True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-000198,Wasih,"Unit 37, Plot 139-885, Cairo Street, Al Qusais Industrial 4, Dubai",True,COD,,DUBAI,DELIVERABLE,OK,,
-ae-001261,Usman,"dxb, uae",True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-001705,Wasih,"Villa 77, Street 89, Khalifa City, Abu Dhabi",True,COD,,,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,,
-ae-003388,Usman,شقة 7، بناية البستان، شارع 72، الكرامة، دبي,True,PREPAID,,,DELIVERABLE,OK,,
-ae-002593,Wasih,Mirdif,False,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-002026,Usman,"next to emarat petrol station, silicon oasis, dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-000182,Wasih,"room 55, oais builders staff accommodation, al quoz industrial 2, dubai",False,COD,,,DELIVERABLE,OK,,
-ae-000677,Usman,Town Square Dubai deliver fast,True,COD,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000406,Wasih,"Warehouse 32, Plot 921, Tripoli Street, Al Quoz, Dubai",True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,,
-ae-002304,Usman,"unit 50, plot 448-526, street 67, ajman industrial 2",True,PREPAID,,Ajman,DELIVERABLE,OK,,
-ae-000003,Wasih,"Apt 3707, Horizon Tower, Silicon Oasis, whatsapp me for location",False,COD,,dubai,LIKELY_FAIL,COD_HIGH_RISK CALL_REQUESTED NO_PHONE,,
-ae-001897,Usman,"Flat 906, بناية الياسمين, Al Mizhar, Dubai",True,COD,,Dxb,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-000690,Wasih,"office 102, al buustan heights, street 87, al karama",True,COD,,,DELIVERABLE,OK,,
-ae-001681,Usman,"PO Box 79982, Al Wasl, Dubai",True,COD,,Dxb,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001135,Wasih,"Villa 5, Cairo Street, Mussafah, ask the watchman for the key, Abu Dhabi, +971 50 744 6085",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-002531,Usman,"Villa 4 , St 86 , Jumeirah 2",False,COD,,,DELIVERABLE,OK,,
-ae-003071,Wasih,dxb uae,True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-003399,Usman,"Apt 2515, Al Shams Bldg, Mirdif, call me before delivery, Dubai",True,PREPAID,,dubai,CALL_FIRST,CALL_REQUESTED,,
-ae-001933,Wasih,"office 3007, al reef tower, jumeirah 1, dxb",True,PREPAID,,,DELIVERABLE,OK,,
-ae-000577,Usman,"Muhaisnah, Dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000124,Wasih,شقة 30 بناية الياسمين near metro Muhaisnah Dubai,True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-002838,Usman,"Shop 54, Plot 873-549, St 76, Industrial Area 12, mob 0549207675",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002213,Wasih,ajman,True,PREPAID,,ajman,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000700,Usman,شقة 11 بناية البستان near metro Jebel Ali Dubai,True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,,
-ae-002680,Wasih,"Flat 1310, Horizon Residence, Al Rawda, Ajman, mob 0568319288",True,PREPAID,,ajman,DELIVERABLE,OK,,
-ae-002452,Usman,"Jumeirah Village Triangle, Dubai, deliver fast",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-003057,Wasih,"Cedar Residence, Tourist Club Area, Abu Dhabi, 0529664833",True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,,
-ae-001648,Usman,Flat 607 Moonlight Residence Abu Shagara,False,PREPAID,,sharjah,DELIVERABLE,OK,,
-ae-002284,Wasih,baniyas abu dhabi uae,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-000346,Usman,"Flat 300, بناية البستان, Jumeirah 3, Dubai",True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,,
-ae-002574,Wasih,unit 51 plot 810-260 street 93b jebel ali industrial 1 +971 52 263 2925,True,PREPAID,,Dxb,DELIVERABLE,OK,,
-ae-002322,Usman,sharjah,True,PREPAID,,Sharjah,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000337,Wasih,"opp choithrams , discovery gardens , dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-001910,Usman,"Flat 1815, Coral Bay Tower, Muhaisnah, Dubai",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002651,Wasih,"P.O Box 43017, Al Raha, Abu Dhabi",True,COD,,abu dhabi,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001230,Usman,fela 56 shar3 76 ganb el ba2ala Sonapur Dubai,True,PREPAID,,DUBAI,CALL_FIRST,MIXED_SCRIPT,,
-ae-000001,Wasih,شقة 24، بناية الياسمين، شارع 89، البرشاء، دبي,True,COD,,,DELIVERABLE,OK,,
-ae-000703,Usman,"P.O. Box 69258, Al Nakhil, Ajman",True,COD,,ajman,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-001244,Wasih,"beside al farooq mosque, sonapur, dubai",True,PREPAID,,dubai,CALL_FIRST,LANDMARK_ONLY,,
-ae-000925,Usman,"Room 94, Camp 22, Sonapur, dxb",True,COD,,DUBAI,DELIVERABLE,OK,,
-ae-000892,Wasih,JVC,True,PREPAID,,dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000842,Usman,"Al Bustan Heights, Deira",True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,,
-ae-002410,Wasih,"Villa 57 , Tripoli St , Dubai Marina , dxb",False,COD,,dubai,DELIVERABLE,OK,,
-ae-003078,Usman,Karama Dubai my home,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-001361,Wasih,"Villa 118,  Street 67a,  Al Nakhil,  ask the security",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-000089,Usman,شقة 7، بناية الياسمين، شارع 83، ديرة، دبي,True,PREPAID,,,DELIVERABLE,OK,,
-ae-000451,Wasih,مقابل مسجد الفاروق، المجاز، الشارقة,False,PREPAID,,sharjah,LIKELY_FAIL,LANDMARK_ONLY NO_PHONE,,
-ae-003478,Usman,Villa 63 Street 76a JVC ask watchman Dubai,True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,,
-ae-003442,Wasih,"Apartment 3711 ,  Al Bustan Tower ,  JLT",True,PREPAID,,,DELIVERABLE,OK,,
-ae-003083,Usman,Mirdif,True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-000511,Wasih,"next to Al Farooq Mosque, Al Yarmook, Sharjah",True,PREPAID,,Sharjah,CALL_FIRST,LANDMARK_ONLY,,
-ae-002489,Usman,"villa 71 , street 94 , al rigga , dubai , mob 0504177563",True,PREPAID,,DUBAI,DELIVERABLE,OK,,
-ae-002355,Wasih,jbr,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-001330,Usman,falcon crest building yas island abu dhabi,True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,,
-ae-002532,Wasih,"Villa 18, Street 93b, Al Majaz, Sharjah",True,PREPAID,,SHARJAH,DELIVERABLE,OK,,
-ae-003039,Usman,"Villa 66, شارع 97, Dubai Silicon Oasis",False,PREPAID,,,LIKELY_FAIL,MIXED_SCRIPT NO_PHONE,,
-ae-003243,Wasih,"next to Mashreq ATM, Al Barsha South, Dubai",True,COD,,dubai,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-000974,Usman,"Office 714 ,  Al Bustan Tower ,  Khalifa City A ,  Abu Dhabi ,  P.O Box 42879",True,PREPAID,,,DELIVERABLE,OK,,
-ae-002831,Wasih,muwaileh sharjah deliver fast,False,COD,,,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-003262,Usman,"beside Al Farooq Mosque, Al Barsha 3, Dubai",True,PREPAID,,DUBAI,CALL_FIRST,LANDMARK_ONLY,,
-ae-002115,Wasih,"Villa 22, Street 67a, Al Twar, Dubai",True,COD,,,DELIVERABLE,OK,,
-ae-002428,Usman,"al muhaisnah, dxb, my home",True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID,,
-ae-001166,Wasih,"Horizon Residence, Dubai Silicon Oasis, Dubai",True,PREPAID,,Dxb,CALL_FIRST,MISSING_UNIT,,
-ae-001627,Usman,"villa 14, cairo street, town square, dubai",True,COD,,,DELIVERABLE,OK,,
-ae-001389,Wasih,"po box 69512, dubai",True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-000679,Usman,"Flat 456, بناية البستان, Al Warqa, Dubai",True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,,
-ae-003182,Wasih,"Villa 33 ,  Street 85a ,  Al Jurf ,  Makani: 7402761105",True,COD,,ajman,DELIVERABLE,OK,,
-ae-001212,Usman,"P.O Box 66260, Dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,,
-ae-000554,Wasih,"beside Mashreq ATM, Abu Shagara, SHJ",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,,
-ae-002624,Usman,"flat 3318, opal tower, al nahda 1, 0524515681",True,COD,,,DELIVERABLE,OK,,
-ae-002788,Wasih,Sharjah,True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,,
-ae-003461,Usman,"Villa 43, St 80, Al Rigga, ask security at gate",True,PREPAID,,,CALL_FIRST,CALL_REQUESTED,,
+ae-002693,llm-blind,Office 205 Al Yasmeen Bldg Mohammed Bin Zayed City AUH,True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002296,llm-blind,"musaffah, abu dhabi, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,area only; COD
+ae-000785,llm-blind,"Flat 328, بناية الشمس, Al Karama, Dubai",True,PREPAID,,Dxb,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,Arabic building name (Al Shams) is clear
+ae-002023,llm-blind,"Villa 53, Street 70, Mohammed Bin Zayed City",True,PREPAID,,ABU DHABI,DELIVERABLE,OK,DELIVERABLE,
+ae-002622,llm-blind,"the greens, dxb, 0526308739",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,area only; phone does not help find a door
+ae-001916,llm-blind,"flat 4006, al bustan heights, town square, whatsapp me for location, dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,CALL_FIRST,whatsapp for location requested
+ae-001643,llm-blind,"Room 77,  Oasis Builders Staff Accommodation,  Jebel Ali Industrial 3,  Dubai",True,COD,,,DELIVERABLE,OK,DELIVERABLE,staff accommodation with room number (D12)
+ae-001898,llm-blind,sharjah uae mob 0542758896,True,COD,,Sharjah,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000375,llm-blind,"fela 91, shar3 67, ganb el ba2ala, al ras, dubai",True,PREPAID,,Dubai,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,Arabizi: villa 91 street 67 next to grocery; fields clear
+ae-003025,llm-blind,"room 75, camp 26, sonapur, dubai",True,PREPAID,,dubai,DELIVERABLE,OK,DELIVERABLE,numbered camp in Sonapur (D12); camp numbering is thin
+ae-000096,llm-blind,"Dubai Investments Park, Dubai",True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000315,llm-blind,مقابل الجمعية التعاونية، البرشاء، دبي,True,PREPAID,,,CALL_FIRST,LANDMARK_ONLY,CALL_FIRST,landmark only (opposite coop)
+ae-003449,llm-blind,apt 305 horizon residence al mankhool road al barsha 1 dubai,True,COD,,,DELIVERABLE,OK,DELIVERABLE,Al Mankhool Rd is not in Al Barsha but building+flat+area given
+ae-000260,llm-blind,JBR,True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,too short
+ae-000841,llm-blind,"Villa 54, Tripoli St, Al Nahda",True,COD,,,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,CALL_FIRST,Al Nahda without emirate; COD
+ae-000565,llm-blind,"villa 38, street 75, saadiyat island",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000744,llm-blind,"al furjan, dxb, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-001914,llm-blind,"villa 77, street 92a, al rigga, pls call on arrival, dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,DELIVERABLE,call on arrival is not a location request; door findable
+ae-001520,llm-blind,"Villa 61, Street 74, Jumeirah 1",True,PREPAID,,DUBAI,DELIVERABLE,OK,DELIVERABLE,
+ae-002719,llm-blind,"Al Muhaisnah, Dubai, mob 0545926090",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-003256,llm-blind,"beside Emarat petrol station, Jebel Ali",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-001462,llm-blind,"Warehouse 38, Plot 447-767, Street 80, Al Quoz Industrial 2, DXB",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002270,llm-blind,"The Greens, Dubai, mob 0588765996",True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,area only
+ae-002585,llm-blind,"behind Mashreq ATM, Business Bay, Dxb",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-002094,llm-blind,"Flat 2519, Al Reef Residence, University City, Sharjah, mob 0527028642",True,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-001267,llm-blind,"pobox 34852 , al khalidiyah , abu dhabi",True,COD,,Abu Dhabi,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-000023,llm-blind,"Villa 52, شارع 75, Discovery Gardens, Dubai",True,PREPAID,,DUBAI,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,Arabic street word; villa+street+area clear
+ae-000030,llm-blind,فيلا 74، شارع 93، ديرة، دبي، 0542083082,True,COD,,Dxb,DELIVERABLE,OK,DELIVERABLE,
+ae-000827,llm-blind,"cral bay residence , muwaileh , sharjah",False,PREPAID,,,LIKELY_FAIL,MISSING_UNIT NO_PHONE,LIKELY_FAIL,building without unit and no phone
+ae-002019,llm-blind,"Flat 358, بناية الشمس, Al Jazzat, Sharjah",True,COD,,sharjah,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,
+ae-001755,llm-blind,"Flat 1104, Al Reef Tower, Deira",False,COD,,DUBAI,DELIVERABLE,OK,DELIVERABLE,full address; no phone does not escalate (D2)
+ae-000191,llm-blind,Tourist Club Area Abu Dhabi,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000893,llm-blind,"Villa 60, Tripoli Street, JVT, whatsapp me for location, Dubai",True,PREPAID,,dubai,CALL_FIRST,CALL_REQUESTED,CALL_FIRST,whatsapp for location requested
+ae-001964,llm-blind,"Villa 53, Street 90, Al Majaz, Makani No. 44190 81298, 0558134367",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000995,llm-blind,dubai south dxb,True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-001540,llm-blind,3mara 28 sha2a 40 ganb el ba2ala saadiyat island,True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,CALL_FIRST,Arabizi building 28 flat 40 with no street on Saadiyat
+ae-003085,llm-blind,"office 1614 ,  coral bay tower ,  town square ,  dubai",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002857,llm-blind,bur dubai dubai,True,PREPAID,,dubai,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-002783,llm-blind,"Flat 590, بناية الشمس, Al Yarmook, Sharjah, mob 0528792246",True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,
+ae-000515,llm-blind,"shop 43 , plot 682-692 , st 93 , al quoz industrial 3 , dxb",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002739,llm-blind,P.O. Box 74709 Sonapur Dubai,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-002869,llm-blind,"beside Union Coop, Al Satwa, Dxb, mob 0503170258",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only; COD
+ae-002829,llm-blind,Villa 13 Street 83 Muwaileh Sharjah,True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002700,llm-blind,"International City, Dubai, deliver fast",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-002184,llm-blind,Villa 49 97th Street Khalifa City Abu Dhabi,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,DELIVERABLE,Khalifa City qualified by Abu Dhabi
+ae-000551,llm-blind,Apt 2103 Al Bustan Bldg Al Yarmook Shj,True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000380,llm-blind,"pobox 93672, dubai",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001723,llm-blind,Flat 233 Horizon Tower Al Qusais Dubai,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,DELIVERABLE,
+ae-000292,llm-blind,"Room 58, Camp 6, Al Muhaisnah, Dubai",True,COD,,Dubai,DELIVERABLE,OK,DELIVERABLE,camp with room number (D12)
+ae-000745,llm-blind,Karama,True,PREPAID,,Dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-001058,llm-blind,villa 25 64th street al barsha 3 whatsapp me for location dubai,True,PREPAID,,,CALL_FIRST,CALL_REQUESTED,CALL_FIRST,whatsapp for location requested
+ae-000721,llm-blind,"flat 2612,  opal tower,  al barsha 1,  dubai,  0528457619",True,COD,,Dubai,DELIVERABLE,OK,DELIVERABLE,
+ae-001671,llm-blind,"Dubai, UAE",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-002478,llm-blind,"in front of Mashreq ATM, Downtown Dubai, Dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-000749,llm-blind,"Room 211, Camp 5, Musaffah, Abu Dhabi",True,COD,,abu dhabi,DELIVERABLE,OK,DELIVERABLE,camp with room number (D12)
+ae-001103,llm-blind,"University City, Sharjah, my home, +971 58 805 0390",True,COD,,SHARJAH,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,area only
+ae-000682,llm-blind,Warehouse 3 Plot 452 Cairo Street Al Quoz Dubai,True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,DELIVERABLE,
+ae-001083,llm-blind,"Office 2139, Opal Building, Jumeirah, Dubai, PO Box 27473, 0561600351",True,PREPAID,,DUBAI,DELIVERABLE,OK,DELIVERABLE,door address present alongside PO Box
+ae-002373,llm-blind,jvc,True,PREPAID,,Dxb,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-002051,llm-blind,"Villa 26 ,  Al Mankhool Road ,  Dubai Investments Park ,  call before coming ,  Dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,CALL_FIRST,call before coming
+ae-002792,llm-blind,"office 1718, horizon building, al ras, dxb, p.o box 58958",True,COD,,DUBAI,DELIVERABLE,OK,DELIVERABLE,door address present alongside PO Box
+ae-000976,llm-blind,P.O. Box 39345 Bur Dubai Dubai,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001249,llm-blind,"Flat 218, بناية الياسمين, Al Taawun, Sharjah",True,COD,,SHARJAH,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,
+ae-002518,llm-blind,"Room 143, Camp 22, Musaffah, AUH",True,COD,,abu dhabi,DELIVERABLE,OK,DELIVERABLE,camp with room number (D12)
+ae-002077,llm-blind,"Tourist Club Area, Abu Dhabi, pls deliver asap",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000818,llm-blind,"Warehouse 18, Plot 597, Street 76a, Al Quoz, Dubai",True,COD,,dubai,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,DELIVERABLE,
+ae-001865,llm-blind,"Room 48 , Camp 13 , Al Muhaisnah , Dubai",True,COD,,,DELIVERABLE,OK,DELIVERABLE,camp with room number (D12)
+ae-000395,llm-blind,"Al Barsha 3, Dubai, my home",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000333,llm-blind,"Villa 8, Street 69, Al Barsha South, whatsapp me for location, Dubai",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,CALL_FIRST,whatsapp for location requested
+ae-001305,llm-blind,"flat 1901, al yasmeen tower, yas island, auh, mob 0508591052",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000726,llm-blind,muwaileh sharjah,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000107,llm-blind,"Hoorizon Heights, Al Shamkha, 0589634538",True,PREPAID,,,CALL_FIRST,MISSING_UNIT,CALL_FIRST,named building but no unit
+ae-001280,llm-blind,room 68 camp 26 jebel ali dxb,True,PREPAID,,dubai,DELIVERABLE,OK,DELIVERABLE,camp in Jebel Ali (D12); Jebel Ali is very large
+ae-001800,llm-blind,"Musaffah ,  Abu Dhabi",False,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-001624,llm-blind,"near delhi private school,  al barsha south,  dxb,  0589638547",True,PREPAID,,Dxb,CALL_FIRST,LANDMARK_ONLY,CALL_FIRST,landmark only
+ae-001785,llm-blind,"Apt 310, Opal Tower, Street 97b, Karama, Dubai",True,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-001665,llm-blind,"p.o box 38097, dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001104,llm-blind,beside Emarat petrol station Al Nuaimiya Ajman,True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only; COD
+ae-000198,llm-blind,"Unit 37, Plot 139-885, Cairo Street, Al Qusais Industrial 4, Dubai",True,COD,,DUBAI,DELIVERABLE,OK,DELIVERABLE,
+ae-001261,llm-blind,"dxb, uae",True,COD,,DUBAI,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-001705,llm-blind,"Villa 77, Street 89, Khalifa City, Abu Dhabi",True,COD,,,CALL_FIRST,AMBIGUOUS_AREA COD_HIGH_RISK,DELIVERABLE,
+ae-003388,llm-blind,شقة 7، بناية البستان، شارع 72، الكرامة، دبي,True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002593,llm-blind,Mirdif,False,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-002026,llm-blind,"next to emarat petrol station, silicon oasis, dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-000182,llm-blind,"room 55, oais builders staff accommodation, al quoz industrial 2, dubai",False,COD,,,DELIVERABLE,OK,DELIVERABLE,staff accommodation (D12); no phone stays DELIVERABLE
+ae-000677,llm-blind,Town Square Dubai deliver fast,True,COD,,Dubai,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000406,llm-blind,"Warehouse 32, Plot 921, Tripoli Street, Al Quoz, Dubai",True,PREPAID,,,CALL_FIRST,AMBIGUOUS_AREA,DELIVERABLE,
+ae-002304,llm-blind,"unit 50, plot 448-526, street 67, ajman industrial 2",True,PREPAID,,Ajman,DELIVERABLE,OK,DELIVERABLE,
+ae-000003,llm-blind,"Apt 3707, Horizon Tower, Silicon Oasis, whatsapp me for location",False,COD,,dubai,LIKELY_FAIL,COD_HIGH_RISK CALL_REQUESTED NO_PHONE,LIKELY_FAIL,location request but no phone to call
+ae-001897,llm-blind,"Flat 906, بناية الياسمين, Al Mizhar, Dubai",True,COD,,Dxb,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,
+ae-000690,llm-blind,"office 102, al buustan heights, street 87, al karama",True,COD,,,DELIVERABLE,OK,DELIVERABLE,no emirate but Al Karama with street resolves to Dubai
+ae-001681,llm-blind,"PO Box 79982, Al Wasl, Dubai",True,COD,,Dxb,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001135,llm-blind,"Villa 5, Cairo Street, Mussafah, ask the watchman for the key, Abu Dhabi, +971 50 744 6085",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,DELIVERABLE,watchman note is a handover note; door is findable
+ae-002531,llm-blind,"Villa 4 , St 86 , Jumeirah 2",False,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-003071,llm-blind,dxb uae,True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-003399,llm-blind,"Apt 2515, Al Shams Bldg, Mirdif, call me before delivery, Dubai",True,PREPAID,,dubai,CALL_FIRST,CALL_REQUESTED,CALL_FIRST,call me before delivery
+ae-001933,llm-blind,"office 3007, al reef tower, jumeirah 1, dxb",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000577,llm-blind,"Muhaisnah, Dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000124,llm-blind,شقة 30 بناية الياسمين near metro Muhaisnah Dubai,True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,mixed script but building+flat+area clear
+ae-002838,llm-blind,"Shop 54, Plot 873-549, St 76, Industrial Area 12, mob 0549207675",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,Industrial Area 12 implies Sharjah; plot+street given
+ae-002213,llm-blind,ajman,True,PREPAID,,ajman,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000700,llm-blind,شقة 11 بناية البستان near metro Jebel Ali Dubai,True,COD,,,CALL_FIRST,MIXED_SCRIPT COD_HIGH_RISK,DELIVERABLE,building+flat in Jebel Ali; area is large
+ae-002680,llm-blind,"Flat 1310, Horizon Residence, Al Rawda, Ajman, mob 0568319288",True,PREPAID,,ajman,DELIVERABLE,OK,DELIVERABLE,
+ae-002452,llm-blind,"Jumeirah Village Triangle, Dubai, deliver fast",True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-003057,llm-blind,"Cedar Residence, Tourist Club Area, Abu Dhabi, 0529664833",True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,CALL_FIRST,named building but no unit; COD
+ae-001648,llm-blind,Flat 607 Moonlight Residence Abu Shagara,False,PREPAID,,sharjah,DELIVERABLE,OK,DELIVERABLE,
+ae-002284,llm-blind,baniyas abu dhabi uae,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-000346,llm-blind,"Flat 300, بناية البستان, Jumeirah 3, Dubai",True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,
+ae-002574,llm-blind,unit 51 plot 810-260 street 93b jebel ali industrial 1 +971 52 263 2925,True,PREPAID,,Dxb,DELIVERABLE,OK,DELIVERABLE,
+ae-002322,llm-blind,sharjah,True,PREPAID,,Sharjah,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000337,llm-blind,"opp choithrams , discovery gardens , dubai",True,COD,,Dxb,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-001910,llm-blind,"Flat 1815, Coral Bay Tower, Muhaisnah, Dubai",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002651,llm-blind,"P.O Box 43017, Al Raha, Abu Dhabi",True,COD,,abu dhabi,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001230,llm-blind,fela 56 shar3 76 ganb el ba2ala Sonapur Dubai,True,PREPAID,,DUBAI,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,Arabizi: villa 56 street 76; fields clear
+ae-000001,llm-blind,شقة 24، بناية الياسمين، شارع 89، البرشاء، دبي,True,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000703,llm-blind,"P.O. Box 69258, Al Nakhil, Ajman",True,COD,,ajman,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-001244,llm-blind,"beside al farooq mosque, sonapur, dubai",True,PREPAID,,dubai,CALL_FIRST,LANDMARK_ONLY,CALL_FIRST,landmark only
+ae-000925,llm-blind,"Room 94, Camp 22, Sonapur, dxb",True,COD,,DUBAI,DELIVERABLE,OK,DELIVERABLE,camp with room number (D12)
+ae-000892,llm-blind,JVC,True,PREPAID,,dubai,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000842,llm-blind,"Al Bustan Heights, Deira",True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,CALL_FIRST,named building but no unit; COD
+ae-002410,llm-blind,"Villa 57 , Tripoli St , Dubai Marina , dxb",False,COD,,dubai,DELIVERABLE,OK,DELIVERABLE,villa+street+area; no phone does not escalate (D2)
+ae-003078,llm-blind,Karama Dubai my home,False,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-001361,llm-blind,"Villa 118,  Street 67a,  Al Nakhil,  ask the security",True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,CALL_FIRST,Al Nakhil with no emirate (Ajman or RAK); COD
+ae-000089,llm-blind,شقة 7، بناية الياسمين، شارع 83، ديرة، دبي,True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-000451,llm-blind,مقابل مسجد الفاروق، المجاز، الشارقة,False,PREPAID,,sharjah,LIKELY_FAIL,LANDMARK_ONLY NO_PHONE,LIKELY_FAIL,landmark only and no phone
+ae-003478,llm-blind,Villa 63 Street 76a JVC ask watchman Dubai,True,COD,,,CALL_FIRST,COD_HIGH_RISK CALL_REQUESTED,DELIVERABLE,
+ae-003442,llm-blind,"Apartment 3711 ,  Al Bustan Tower ,  JLT",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-003083,llm-blind,Mirdif,True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-000511,llm-blind,"next to Al Farooq Mosque, Al Yarmook, Sharjah",True,PREPAID,,Sharjah,CALL_FIRST,LANDMARK_ONLY,CALL_FIRST,landmark only
+ae-002489,llm-blind,"villa 71 , street 94 , al rigga , dubai , mob 0504177563",True,PREPAID,,DUBAI,DELIVERABLE,OK,DELIVERABLE,
+ae-002355,llm-blind,jbr,True,COD,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,too short
+ae-001330,llm-blind,falcon crest building yas island abu dhabi,True,COD,,,CALL_FIRST,MISSING_UNIT COD_HIGH_RISK,CALL_FIRST,named building but no unit; COD
+ae-002532,llm-blind,"Villa 18, Street 93b, Al Majaz, Sharjah",True,PREPAID,,SHARJAH,DELIVERABLE,OK,DELIVERABLE,
+ae-003039,llm-blind,"Villa 66, شارع 97, Dubai Silicon Oasis",False,PREPAID,,,LIKELY_FAIL,MIXED_SCRIPT NO_PHONE,DELIVERABLE,no phone does not escalate (D2)
+ae-003243,llm-blind,"next to Mashreq ATM, Al Barsha South, Dubai",True,COD,,dubai,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-000974,llm-blind,"Office 714 ,  Al Bustan Tower ,  Khalifa City A ,  Abu Dhabi ,  P.O Box 42879",True,PREPAID,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002831,llm-blind,muwaileh sharjah deliver fast,False,COD,,,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-003262,llm-blind,"beside Al Farooq Mosque, Al Barsha 3, Dubai",True,PREPAID,,DUBAI,CALL_FIRST,LANDMARK_ONLY,CALL_FIRST,landmark only
+ae-002115,llm-blind,"Villa 22, Street 67a, Al Twar, Dubai",True,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-002428,llm-blind,"al muhaisnah, dxb, my home",True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID,LIKELY_FAIL,
+ae-001166,llm-blind,"Horizon Residence, Dubai Silicon Oasis, Dubai",True,PREPAID,,Dxb,CALL_FIRST,MISSING_UNIT,CALL_FIRST,named building but no unit
+ae-001627,llm-blind,"villa 14, cairo street, town square, dubai",True,COD,,,DELIVERABLE,OK,DELIVERABLE,
+ae-001389,llm-blind,"po box 69512, dubai",True,COD,,dubai,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-000679,llm-blind,"Flat 456, بناية البستان, Al Warqa, Dubai",True,PREPAID,,,CALL_FIRST,MIXED_SCRIPT,DELIVERABLE,
+ae-003182,llm-blind,"Villa 33 ,  Street 85a ,  Al Jurf ,  Makani: 7402761105",True,COD,,ajman,DELIVERABLE,OK,DELIVERABLE,
+ae-001212,llm-blind,"P.O Box 66260, Dubai",True,COD,,,LIKELY_FAIL,NO_BUILDING_ID PO_BOX_ONLY,LIKELY_FAIL,PO Box only
+ae-000554,llm-blind,"beside Mashreq ATM, Abu Shagara, SHJ",True,COD,,,CALL_FIRST,LANDMARK_ONLY COD_HIGH_RISK,CALL_FIRST,landmark only
+ae-002624,llm-blind,"flat 3318, opal tower, al nahda 1, 0524515681",True,COD,,,DELIVERABLE,OK,DELIVERABLE,Al Nahda 1 sub-area number implies Dubai (D9)
+ae-002788,llm-blind,Sharjah,True,PREPAID,,,LIKELY_FAIL,NO_BUILDING_ID TOO_SHORT,LIKELY_FAIL,
+ae-003461,llm-blind,"Villa 43, St 80, Al Rigga, ask security at gate",True,PREPAID,,,CALL_FIRST,CALL_REQUESTED,DELIVERABLE,

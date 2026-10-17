@@ -1,12 +1,13 @@
-# Render blueprint for the Pata gateway + UI.
-# The model runs on a DigitalOcean GPU Droplet (deploy/do_vllm.md); this service calls it,
+# Render blueprint for Pata: the gateway, the UI and the API in one web service.
+# The tuned model is served by Tinker's OpenAI-compatible endpoint; this service calls it,
 # validates every answer against the schema, and falls back to the rules when it fails.
+# One-click deploy: https://render.com/deploy?repo=https://github.com/AbdulWasih05/pata
 services:
   - type: web
     name: pata
     runtime: python
-    plan: starter  # free instances sleep, and a cold start would show up as latency in Sentry
-    region: frankfurt
+    plan: free  # sleeps when idle; point an uptime monitor at /healthz to keep it warm
+    region: oregon  # next to the model endpoint; the model call dominates latency
     buildCommand: pip install uv && uv sync --frozen --no-dev
     startCommand: uv run --no-sync uvicorn api.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /healthz
@@ -14,16 +15,17 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.6
+      - key: MODEL_URL
+        value: https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1
+      # The tuned checkpoint (train/RUNS.md, run 2). Replace with your own sampler path.
       - key: PATA_MODEL
-        value: pata
+        value: tinker://66ebff6a-2896-584d-9189-64032bad9b83:train:0/sampler_weights/final
       - key: PATA_SCHEMA_HINT
         value: "0"
       - key: SENTRY_ENVIRONMENT
         value: production
-      # Secrets: set in the Render dashboard, never in this file.
-      - key: DO_VLLM_URL
-        sync: false
-      - key: DO_VLLM_API_KEY
+      # Secrets: Render asks for these on deploy. Leave TINKER_API_KEY empty for rules only.
+      - key: TINKER_API_KEY
         sync: false
       - key: SENTRY_DSN
         sync: false
