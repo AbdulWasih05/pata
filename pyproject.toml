@@ -6,7 +6,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
 dependencies = [
+    "fastapi>=0.143.3",
+    "httpx>=0.28.1",
     "pydantic>=2.7",
+    "python-multipart>=0.0.32",
+    "sentry-sdk>=2.64",
+    "uvicorn[standard]>=0.54.0",
 ]
 
 [project.scripts]
@@ -14,13 +19,21 @@ pata = "pata.cli:main"
 
 [dependency-groups]
 data = [
-    "huggingface-hub>=2.2.0",
+    "huggingface-hub",
     "pandas>=3.0.6",
     "pyarrow>=26.0.0",
 ]
 dev = [
     "pytest>=8.0",
     "ruff>=0.6",
+]
+# Training runs on Linux (WSL on the dev box): tinker-cookbook needs tml-renderers,
+# which ships no Windows wheel.
+train = [
+    "tinker>=0.34.0",
+    "tinker-cookbook ; sys_platform != 'win32'",
+    # Training runs on Tinker's GPUs; locally torch only renders chat templates, so CPU wheels.
+    "torch>=2.10 ; sys_platform == 'linux'",
 ]
 
 [build-system]
@@ -29,6 +42,15 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pata"]
+
+[tool.uv.sources]
+tinker-cookbook = { git = "https://github.com/thinking-machines-lab/tinker-cookbook" }
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.ruff]
 line-length = 100

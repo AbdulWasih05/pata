@@ -57,10 +57,15 @@ _BUILDING_NUMBERED = re.compile(
     + r"|(?:فيلا|بناية|مبنى|عمارة|برج|بيت|منزل)\s*(?:رقم)?\s*\d+"
     + r"|\bfela\s*\d+|\b(?:3mara|3imara|emara|imara|binaya|bnaya)\s*\d+"
 )
+_HOUSE_NO = re.compile(
+    r"\b(?:h\.?\s?no|hno|house\s*no|door\s*no|d\.?\s?no)\.?\s*[:\-.]?\s*[a-z]?-?\d+[a-z]?"
+    r"|#\s*\d+[a-z]?|\bno\.?\s*\d+[a-z]?"
+)
 _LEADING_NUMBER = re.compile(r"^\s*\d+[a-z]?\s*(?:[,/\-]|\s+[a-z])")
 _SLASH_NUMBER = re.compile(r"\b\d+[a-z]?\s*/\s*\d+[a-z]?\b")
 # Flat / housing-board codes: "B-204", "HIG-35", "MIG 12" needs the hyphen to avoid false hits.
-_FLAT_CODE = re.compile(r"\b[a-z]{1,3}\s?-\s?\d+[a-z]?\b")
+# At most 5 digits: "CH - 160125" is a state code and a PIN, not a flat.
+_FLAT_CODE = re.compile(r"\b[a-z]{1,3}\s?-\s?\d{1,5}[a-z]?\b")
 
 _MULTI_UNIT_WORDS = (
     r"towers?|building|bldg|residency|residences?|apartments?|apts?|heights|complex|society|chs"
@@ -87,7 +92,7 @@ _NOT_A_BUILDING = re.compile(
 _UNIT = re.compile(
     r"\b(?:flat|flt|apt|apartment|unit|room|rm|office|off|suite|ste|shop|door|fl|floor|flr)"
     + _NUM
-    + r"|\b\d+(?:st|nd|rd|th)\s*(?:floor|flr|fl)\b"
+    + r"|\b\d+(?:st|nd|rd|th)\.?\s*(?:floor|flr|fl)\b"
     + r"|\b(?:ground|first|second|third|top)\s+floor\b|\bg/?f\b"
     + r"|(?:شقة|مكتب|محل|غرفة)\s*(?:رقم)?\s*\d+"
     + r"|\b(?:sha2a|shaqa|shi2a|shaqqa)\s*\d+"
@@ -268,6 +273,9 @@ def extract_features(inp: TriageInput) -> Features:
         f.unit = orig(m)
     elif f.multi_unit and (m := _LEADING_NUMBER.search(scrubbed) or find(_SLASH_NUMBER)):
         f.unit = orig(m)  # "205, Panorama Complex": the leading number is the flat
+    elif f.multi_unit and named and (m := find(_HOUSE_NO)):
+        # "h.no 323, Balaji Heights": the house number is the flat; the name is the building.
+        f.unit, f.building = orig(m), orig(named)
 
     if spans:
         start, end = spans[0]

@@ -4,14 +4,31 @@ Dispatch triage for couriers. Pata reads a raw customer address plus order conte
 
 Entry for the DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. Built by Abdul Wasih and Usman.
 
-Status: in progress (17 October 2026).
+Status: in progress (17 October 2026). Best checkpoint so far: run 2 (see train/RUNS.md, eval/results.md).
 
 ## How it works
 
-1. `pata/rules.py`: deterministic rules (pure functions, tested). They label the training data and are the fallback at serve time.
-2. A 4B open-weight model (`Qwen/Qwen3.5-4B`) fine-tuned with LoRA on Tinker produces the same JSON contract (`pata/schema.py`).
-3. The tuned model is served with vLLM on a DigitalOcean GPU Droplet.
-4. A FastAPI gateway on Render validates every model answer against the schema and falls back to the rules if it fails. Every request is traced in Sentry.
+```
+ browser / CSV / CLI
+        |
+        v
+ FastAPI gateway (Render)  ---- Sentry agent trace per request
+   1. rules_prelabel   pata/rules.py, always computed
+   2. chat             tuned Qwen3.5-4B on vLLM (DigitalOcean GPU Droplet)
+   3. schema.validate  pata/schema.py (pydantic)
+   4. rules_fallback   only if the model call fails or its JSON is invalid
+        |
+        v
+ decision + normalised fields + driver note + call script
+```
+
+* `pata/schema.py`: the output contract. Rules, prompt, eval and API all import it.
+* `pata/rules.py`: deterministic rules, pure functions with tests. They label the training data and are the serve-time fallback.
+* `pata/prompt.py`: one fixed system prompt for training, eval and serving.
+* `pata/service.py`: the agent loop and its Sentry spans. Addresses are customer PII, so prompt text is only sent to Sentry when `SENTRY_SEND_PROMPTS=1`.
+* `train/`: LoRA SFT of `Qwen/Qwen3.5-4B` on Tinker with the `tinker_cookbook` supervised recipe, thinking disabled. Every run is logged in [train/RUNS.md](train/RUNS.md).
+* `eval/run_eval.py`: base vs tuned vs rules per market. Results in [eval/results.md](eval/results.md).
+* `deploy/do_vllm.md`: Droplet and vLLM setup. `render.yaml`: the gateway blueprint.
 
 ## Run
 
@@ -24,7 +41,25 @@ uv run ruff check .
 uv run python -m data.fetch_in --n 4000
 uv run python -m data.ae_generator --n 3500 --seed 7 --out data/ae/ae_raw.jsonl
 uv run python -m data.label
+
+# gateway + UI on http://127.0.0.1:8000 (rules only unless DO_VLLM_URL is set)
+uv run uvicorn api.main:app --reload
+
+# CLI
+uv run pata triage --market AE --in orders.csv --out triaged.csv
 ```
+
+Training and Tinker-based eval need Linux (`tinker_cookbook` depends on `tml-renderers`, which has no Windows wheel). On Windows, run them in WSL:
+
+```
+uv run python -m train.build_jsonl
+uv run --env-file .env python -m train.train_tinker --run-name run1
+uv run --env-file .env python -m eval.run_eval --checkpoint base
+uv run --env-file .env python -m eval.run_eval --checkpoint tinker://<run>/sampler_weights/<step>
+uv run python -m eval.run_eval --checkpoint rules
+```
+
+Secrets live in `.env` (see `.env.example`), never in the repo.
 
 Split sizes and class balance: [data/splits/STATS.md](data/splits/STATS.md).
 

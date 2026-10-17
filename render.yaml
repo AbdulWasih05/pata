@@ -1,0 +1,29 @@
+# Render blueprint for the Pata gateway + UI.
+# The model runs on a DigitalOcean GPU Droplet (deploy/do_vllm.md); this service calls it,
+# validates every answer against the schema, and falls back to the rules when it fails.
+services:
+  - type: web
+    name: pata
+    runtime: python
+    plan: starter  # free instances sleep, and a cold start would show up as latency in Sentry
+    region: frankfurt
+    buildCommand: pip install uv && uv sync --frozen --no-dev
+    startCommand: uv run --no-sync uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
+      - key: PATA_MODEL
+        value: pata
+      - key: PATA_SCHEMA_HINT
+        value: "0"
+      - key: SENTRY_ENVIRONMENT
+        value: production
+      # Secrets: set in the Render dashboard, never in this file.
+      - key: DO_VLLM_URL
+        sync: false
+      - key: DO_VLLM_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false

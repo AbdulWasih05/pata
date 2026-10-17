@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pata dispatch triage</title>
+<meta name="description" content="Paste an address, get a dispatch decision before the van leaves.">
+<style>
+  :root {
+    --bg: #f7f6f2; --panel: #ffffff; --ink: #1c1b19; --muted: #6b6860; --line: #e2dfd6;
+    --accent: #1f5f8b; --ok: #1e7a46; --ok-bg: #e3f3e9; --call: #9a6200; --call-bg: #fbefd6;
+    --fail: #b3261e; --fail-bg: #fbe3e1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #a29f96; --line: #34332f;
+      --accent: #7fb7e0; --ok: #7fd6a0; --ok-bg: #18301f; --call: #f0c06a; --call-bg: #352a12;
+      --fail: #f19a92; --fail-bg: #3a1c1a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+  textarea, input, select { width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+  textarea { min-height: 72px; resize: vertical; }
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+    margin-top: 12px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+  button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { button.primary { color: #10202c; } }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  .ex { font-size: 13px; padding: 4px 10px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px;
+    border-radius: 999px; white-space: nowrap; }
+  .DELIVERABLE { color: var(--ok); background: var(--ok-bg); }
+  .CALL_FIRST { color: var(--call); background: var(--call-bg); }
+  .LIKELY_FAIL { color: var(--fail); background: var(--fail-bg); }
+  .card h2 { font-size: 18px; margin: 0 0 8px; display: flex; gap: 10px; align-items: center;
+    flex-wrap: wrap; }
+  .note { font-size: 16px; margin: 6px 0; }
+  .codes { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--muted); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 10px 0 0;
+    font-size: 14px; }
+  dt { color: var(--muted); }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line);
+    vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; }
+  .err { color: var(--fail); }
+  footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pata</h1>
+  <p class="sub">Paste a customer address. Get a dispatch decision before the van leaves.</p>
+
+  <section class="panel">
+    <label for="addr">Address, as the customer typed it</label>
+    <textarea id="addr" placeholder="Flat 1203, Marina Pinnacle Tower, Dubai Marina"></textarea>
+    <div class="row">
+      <div><label for="market">Market</label>
+        <select id="market"><option value="AE">UAE</option><option value="IN">India</option></select></div>
+      <div><label for="payment">Payment</label>
+        <select id="payment"><option>PREPAID</option><option>COD</option></select></div>
+      <div><label for="phone">Phone on order</label>
+        <select id="phone"><option value="true">Yes</option><option value="false">No</option></select></div>
+      <div><label for="pin">Declared PIN (India)</label><input id="pin" inputmode="numeric"></div>
+      <div><label for="hint">City hint</label><input id="hint"></div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="go">Triage</button>
+      <span class="muted">Try:</span>
+      <button class="ex" data-m="AE" data-p="COD" data-a="Villa 12, Street 7, Al Barsha 2, Dubai">Villa in Al Barsha</button>
+      <button class="ex" data-m="AE" data-p="COD" data-a="behind Lulu Hypermarket Al Barsha, call before coming">Behind Lulu</button>
+      <button class="ex" data-m="IN" data-p="PREPAID" data-pin="110001" data-a="H.No 45, MG Road, Bengaluru 560001">PIN mismatch</button>
+    </div>
+  </section>
+
+  <section id="result"></section>
+
+  <section class="panel">
+    <label for="csv">Or upload a CSV of orders (column <code>raw_address</code>; optional
+      <code>market, phone_present, payment, declared_pincode, city_hint</code>)</label>
+    <input type="file" id="csv" accept=".csv,text/csv">
+    <div class="actions">
+      <button class="primary" id="up">Triage CSV</button>
+      <a id="dl" hidden download="triaged.csv">Download triaged.csv</a>
+      <span class="muted" id="upstat"></span>
+    </div>
+    <div class="scroll" id="table"></div>
+  </section>
+
+  <footer>Open-weight 4B model fine-tuned for courier triage, with rule-based fallback.
+    UAE examples are synthetic. <a href="https://github.com/AbdulWasih05/pata">Source</a>.
+    <span id="mode"></span></footer>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chip = (d) => `<span class="chip ${esc(d)}">${esc(d).replace("_", " ")}</span>`;
+
+fetch("/healthz").then(r => r.json()).then(h => {
+  $("mode").textContent = h.model ? `Model: ${h.model}.` : "Running on rules only.";
+}).catch(() => {});
+
+document.querySelectorAll(".ex").forEach(b => b.onclick = () => {
+  $("addr").value = b.dataset.a; $("market").value = b.dataset.m;
+  $("payment").value = b.dataset.p; $("pin").value = b.dataset.pin || ""; $("hint").value = "";
+  $("go").click();
+});
+
+$("go").onclick = async () => {
+  const raw = $("addr").value.trim();
+  if (!raw) return;
+  $("go").disabled = true;
+  try {
+    const r = await fetch("/triage", { method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ market: $("market").value, raw_address: raw, payment: $("payment").value,
+        phone_present: $("phone").value === "true", declared_pincode: $("pin").value || null,
+        city_hint: $("hint").value || null }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(JSON.stringify(j.detail ?? j));
+    const o = j.output, n = o.normalised;
+    const fields = Object.entries(n).filter(([k, v]) => v && k !== "country");
+    $("result").innerHTML = `<div class="panel card">
+      <h2>${chip(o.decision)} <span class="muted">confidence ${o.confidence.toFixed(2)}</span></h2>
+      <p class="note">${esc(o.driver_note)}</p>
+      ${o.call_script ? `<p class="muted">Call script: ${esc(o.call_script)}</p>` : ""}
+      <p class="codes">${o.reason_codes.map(esc).join(" · ")}</p>
+      <dl>${fields.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+      <p class="muted">${j.source === "model" ? `Model ${esc(j.model)}` : "Rules"}, ${j.latency_ms} ms
+        ${j.fallback_reason && j.fallback_reason !== "no_model_configured" ? ` (fallback: ${esc(j.fallback_reason)})` : ""}</p>
+    </div>`;
+  } catch (e) {
+    $("result").innerHTML = `<p class="panel err">${esc(e.message)}</p>`;
+  } finally { $("go").disabled = false; }
+};
+
+$("up").onclick = async () => {
+  const f = $("csv").files[0];
+  if (!f) return;
+  $("up").disabled = true; $("upstat").textContent = "Working...";
+  try {
+    const fd = new FormData(); fd.append("file", f); fd.append("market", $("market").value);
+    const r = await fetch("/triage/csv", { method: "POST", body: fd });
+    const text = await r.text();
+    if (!r.ok) throw new Error(text);
+    $("dl").href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); $("dl").hidden = false;
+    const rows = parseCsv(text), head = rows.shift() || [];
+    const show = ["raw_address", "decision", "driver_note", "reason_codes"].map(c => head.indexOf(c));
+    const counts = {};
+    rows.forEach(r => counts[r[show[1]]] = (counts[r[show[1]]] || 0) + 1);
+    $("upstat").textContent = `${rows.length} orders: ` + Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(", ");
+    $("table").innerHTML = `<table><tr><th>Address</th><th>Decision</th><th>Driver note</th><th>Reasons</th></tr>${
+      rows.map(r => `<tr><td>${esc(r[show[0]])}</td><td>${chip(r[show[1]])}</td><td>${esc(r[show[2]])}</td>
+        <td class="codes">${esc(r[show[3]])}</td></tr>`).join("")}</table>`;
+  } catch (e) {
+    $("upstat").innerHTML = `<span class="err">${esc(e.message)}</span>`;
+  } finally { $("up").disabled = false; }
+};
+
+function parseCsv(t) {
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"' && t[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n") { row.push(cell.replace(/\r$/, "")); rows.push(row); row = []; cell = ""; }
+    else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+</script>
+</body>
+</html>

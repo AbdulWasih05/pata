@@ -95,6 +95,12 @@ def _write_jsonl(path: Path, rows: list[dict]) -> None:
 def _write_handcheck(market: str, rows: list[dict]) -> None:
     GOLD.mkdir(parents=True, exist_ok=True)
     path = GOLD / f"{market.lower()}_handcheck.csv"
+    if path.exists():
+        with path.open(encoding="utf-8") as fh:
+            if any((r.get("gold_decision") or "").strip() for r in csv.DictReader(fh)):
+                # Human work is never overwritten; a fresh sheet goes next to it instead.
+                path = path.with_suffix(".new.csv")
+                print(f"{market}: hand-check sheet has human labels, writing {path} instead")
     cols = ["id", "reviewer", "raw_address", "phone_present", "payment", "declared_pincode",
             "city_hint", "silver_decision", "silver_reasons", "gold_decision", "notes"]
     with path.open("w", encoding="utf-8", newline="") as fh:
