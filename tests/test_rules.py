@@ -240,3 +240,17 @@ def test_deterministic():
     a = run("Villa 4, Street 12, Al Nahda", payment="COD")
     b = run("Villa 4, Street 12, Al Nahda", payment="COD")
     assert a == b
+
+
+@pytest.mark.parametrize(
+    "addr",
+    [
+        "HIG-35, PHASE-III, RAJIV NAGAR, KURMANPALEM, VISAKHAPATNAM 530046",
+        "KANWAL HOUSE, INDUSTRIAL ESTATE ANANTNAG 192101",
+        "205 , PANORAMA COMPLEX, ALKAPURI, R.C. DUTT ROAD, VADODARA 390005",
+        "FLAT 1 A, 32 FIRST MAIN ROAD GANDHI NAGAR ADYAR, CHENNAI 600020",
+    ],
+)
+def test_in_registry_patterns_deliverable(addr):
+    out = run(addr, market="IN")
+    assert out.decision == D, out.reason_codes

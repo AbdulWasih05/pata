@@ -34,11 +34,12 @@ _ARABIC = re.compile(r"[؀-ۿ]")
 _DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 _LATIN = re.compile(r"[a-z]")
 
-# Phone numbers are stripped before PIN / Makani detection so they are not misread.
-_PHONE = re.compile(
-    r"(?:\+?91[\s-]?)?(?<!\d)[6-9]\d{4}[\s-]?\d{5}(?!\d)"
-    r"|(?:\+?971[\s-]?|(?<!\d)0)5\d[\s-]?\d{3}[\s-]?\d{4}(?!\d)"
-)
+# Phone numbers are stripped before PIN / building detection so they are not misread.
+# Per market: an Indian mobile pattern would otherwise eat UAE Makani numbers.
+_PHONE = {
+    Market.IN: re.compile(r"(?:\+?91[\s-]?)?(?<!\d)[6-9]\d{4}[\s-]?\d{5}(?!\d)"),
+    Market.AE: re.compile(r"(?:\+?971[\s-]?|(?<!\d)0)5\d[\s-]?\d{3}[\s-]?\d{4}(?!\d)"),
+}
 
 _PIN = re.compile(r"(?<![\d])([1-9]\d{2})\s?(\d{3})(?![\d])")
 _MAKANI = re.compile(r"(?:makani|مكاني)\s*(?:no\.?|number|#|:)?\s*[:\-]?\s*(\d{5})\s?(\d{5})")
@@ -58,15 +59,23 @@ _BUILDING_NUMBERED = re.compile(
 )
 _LEADING_NUMBER = re.compile(r"^\s*\d+[a-z]?\s*(?:[,/\-]|\s+[a-z])")
 _SLASH_NUMBER = re.compile(r"\b\d+[a-z]?\s*/\s*\d+[a-z]?\b")
-_FLAT_CODE = re.compile(r"\b[a-z]{1,2}\s?-\s?\d+[a-z]?\b")
+# Flat / housing-board codes: "B-204", "HIG-35", "MIG 12" needs the hyphen to avoid false hits.
+_FLAT_CODE = re.compile(r"\b[a-z]{1,3}\s?-\s?\d+[a-z]?\b")
 
 _MULTI_UNIT_WORDS = (
     r"towers?|building|bldg|residency|residences?|apartments?|apts?|heights|complex|society|chs"
     r"|court|enclave|mansion|plaza|centre|center|mall|arcade|chambers|bhavan|bhawan|block"
+    r"|accommodation|camp"  # staff accommodation / labour camp: findable by company name
 )
-# A named building: up to four words followed by a multi-unit word ("Marina Pinnacle Tower").
+# Named single-occupancy buildings ("Kanwal House", "Shanti Niwas"): identify the door alone.
+_SINGLE_UNIT_WORDS = r"house|niwas|nivas|sadan|kutir|bungalow|cottage|kunj|mahal"
+# A named building: up to four words followed by a building word ("Marina Pinnacle Tower").
 _NAMED_BUILDING = re.compile(
-    r"\b([a-z'&.]+(?:\s+[a-z'&.]+){0,3})\s+(?:" + _MULTI_UNIT_WORDS + r")\b"
+    r"\b([a-z'&.]+(?:\s+[a-z'&.]+){0,3})\s+(?:"
+    + _MULTI_UNIT_WORDS
+    + "|"
+    + _SINGLE_UNIT_WORDS
+    + r")\b"
     r"|(?:بناية|عمارة|برج|مبنى)\s+[؀-ۿ]+(?:\s+[؀-ۿ]+)?"
 )
 _MULTI_UNIT = re.compile(r"\b(?:" + _MULTI_UNIT_WORDS + r")\b|برج|بناية|عمارة|مبنى")
@@ -76,7 +85,7 @@ _NOT_A_BUILDING = re.compile(
 )
 
 _UNIT = re.compile(
-    r"\b(?:flat|apt|apartment|unit|room|rm|office|off|suite|ste|shop|door|fl|floor|flr)"
+    r"\b(?:flat|flt|apt|apartment|unit|room|rm|office|off|suite|ste|shop|door|fl|floor|flr)"
     + _NUM
     + r"|\b\d+(?:st|nd|rd|th)\s*(?:floor|flr|fl)\b"
     + r"|\b(?:ground|first|second|third|top)\s+floor\b|\bg/?f\b"
@@ -214,15 +223,17 @@ def extract_features(inp: TriageInput) -> Features:
     text = cased.lower()
     if len(text) != len(cased):  # rare Unicode case folding that changes length
         cased = text
+    makani = _MAKANI.search(text)  # before phones, so a Makani is never mistaken for one
     # Blank out phones (and below, Makani and PO Box) with spaces so offsets stay aligned.
-    text = _PHONE.sub(_blank, text)
+    text = _PHONE[inp.market].sub(_blank, text)
     f = Features(text=text, tokens=_tokens(text))
 
     def orig(m: re.Match) -> str:
         return re.sub(r"\s+", " ", cased[m.start() : m.end()]).strip(" ,/-")
 
-    if m := _MAKANI.search(text):
-        f.makani = m.group(1) + m.group(2)
+    if makani:
+        f.makani = makani.group(1) + makani.group(2)
+        text = text[: makani.start()] + _blank(makani) + text[makani.end() :]
     if m := _PO_BOX.search(text):
         f.po_box = m.group(1)
     # Strip Makani and PO Box digits before looking for PINs and building numbers.
@@ -255,6 +266,8 @@ def extract_features(inp: TriageInput) -> Features:
         f.unit = orig(m)
     elif inp.market == Market.IN and (m := _FLAT_CODE.search(scrubbed)):
         f.unit = orig(m)
+    elif f.multi_unit and (m := _LEADING_NUMBER.search(scrubbed) or find(_SLASH_NUMBER)):
+        f.unit = orig(m)  # "205, Panorama Complex": the leading number is the flat
 
     if spans:
         start, end = spans[0]
@@ -300,7 +313,8 @@ def _sorted(codes: set[ReasonCode]) -> list[ReasonCode]:
 def decide(inp: TriageInput, f: Features) -> tuple[Decision, list[ReasonCode]]:
     fail: set[ReasonCode] = set()
     call: set[ReasonCode] = set()
-    has_building = bool(f.building) or bool(f.makani)
+    # A numbered unit with a street ("Flat 1 A, 32 First Main Road") is findable too.
+    has_building = bool(f.building or f.makani or (f.unit and f.street))
 
     # LIKELY_FAIL conditions
     if len(f.tokens) < 3:

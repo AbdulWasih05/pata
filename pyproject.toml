@@ -13,6 +13,11 @@ dependencies = [
 pata = "pata.cli:main"
 
 [dependency-groups]
+data = [
+    "huggingface-hub>=2.2.0",
+    "pandas>=3.0.6",
+    "pyarrow>=26.0.0",
+]
 dev = [
     "pytest>=8.0",
     "ruff>=0.6",
