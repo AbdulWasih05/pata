@@ -254,3 +254,25 @@ def test_deterministic():
 def test_in_registry_patterns_deliverable(addr):
     out = run(addr, market="IN")
     assert out.decision == D, out.reason_codes
+
+
+def test_state_code_and_pin_is_not_a_flat():
+    out = run("VASANT ENCLAVE,sec 22,CHANDIGARH,CH - 160125", market="IN")
+    assert out.normalised.unit == ""
+    assert out.decision == C
+    assert R.MISSING_UNIT in out.reason_codes
+
+
+@pytest.mark.parametrize(
+    "addr,unit",
+    [
+        ("h.no 323, balaji heights, station cross st, bangalore, pin 560443", "h.no 323"),
+        ("#743, gokul bhavan, patel road, hadapsar, pune, 411600", "#743"),
+        ("no 19b, royal enclave, station lane, anna nagar, madurai, 625202", "no 19b"),
+        ("shandhya complex, 2nd. floor station rd karimganj, as 788710", "2nd. floor"),
+    ],
+)
+def test_house_number_in_named_building_is_the_unit(addr, unit):
+    out = run(addr, market="IN")
+    assert out.normalised.unit == unit
+    assert R.MISSING_UNIT not in out.reason_codes
