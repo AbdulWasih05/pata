@@ -1,6 +1,6 @@
 """pata triage --market AE --in orders.csv --out triaged.csv
 
-Uses the model endpoint in DO_VLLM_URL when set, otherwise the rules alone.
+Uses the model endpoint in MODEL_URL when set, otherwise the rules alone.
 """
 
 from __future__ import annotations

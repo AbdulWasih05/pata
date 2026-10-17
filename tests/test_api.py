@@ -33,7 +33,7 @@ class StubClient:
 
 @pytest.fixture
 def client(monkeypatch):
-    monkeypatch.delenv("DO_VLLM_URL", raising=False)
+    monkeypatch.delenv("MODEL_URL", raising=False)
     with TestClient(app) as c:
         yield c
 
