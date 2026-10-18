@@ -8,45 +8,47 @@ False-DELIVERABLE rate: share of parcels that should not ship as-is (gold CALL_F
 
 ### IN
 
-| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency |
-|---|---|---|---|---|---|---|---|---|---|---|
-| rules only | 150 | 100.0% | 86.7% | 86.7% | 0.870 | 8.5% (9/106) | 47.3% | 14.0% | 100.0% | 0 ms |
-| Pata, tuned 4B (run 2) | 150 | 100.0% | 86.0% | 86.0% | 0.864 | 10.4% (11/106) | 89.3% | 87.3% | 100.0% | 1151 ms |
-| Qwen3.5-4B base, zero-shot | 150 | 85.3% | 43.3% | 56.0% | 0.376 | 26.4% (28/106) | 52.3% | 76.6% | 93.8% | 1074 ms |
+| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency | Cost / 1,000 parcels |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| rules only | 150 | 100.0% | 86.7% | 86.7% | 0.870 | 8.5% (9/106) | 47.3% | 14.0% | 100.0% | 1 ms | $0.000 |
+| Pata, tuned 4B (run 2) | 150 | 100.0% | 86.0% | 86.0% | 0.864 | 10.4% (11/106) | 90.0% | 87.3% | 100.0% | 1151 ms | $0.166 |
+| Qwen3.5-4B base, zero-shot | 150 | 85.3% | 43.3% | 56.0% | 0.376 | 26.4% (28/106) | 53.1% | 75.8% | 93.8% | 1105 ms | $0.328 |
+| Qwen3.5-397B-A17B, zero-shot | 150 | 87.3% | 48.7% | 59.3% | 0.471 | 6.6% (7/106) | 63.4% | 85.5% | 93.1% | 1576 ms | $2.195 |
 
 ### AE
 
-| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency |
-|---|---|---|---|---|---|---|---|---|---|---|
-| rules only | 150 | 100.0% | 84.7% | 84.7% | 0.840 | 0.0% (0/77) | 92.0% | 94.7% | 100.0% | 0 ms |
-| Pata, tuned 4B (run 2) | 150 | 100.0% | 85.3% | 85.3% | 0.847 | 0.0% (0/77) | 100.0% | 100.0% | 100.0% | 1130 ms |
-| Qwen3.5-4B base, zero-shot | 150 | 82.0% | 25.3% | 40.0% | 0.219 | 0.0% (0/77) | 74.0% | 73.2% | 100.0% | 1072 ms |
+| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency | Cost / 1,000 parcels |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| rules only | 150 | 100.0% | 84.7% | 84.7% | 0.840 | 0.0% (0/77) | 92.0% | 94.7% | 100.0% | 1 ms | $0.000 |
+| Pata, tuned 4B (run 2) | 150 | 100.0% | 85.3% | 85.3% | 0.847 | 0.0% (0/77) | 100.0% | 100.0% | 100.0% | 1227 ms | $0.148 |
+| Qwen3.5-4B base, zero-shot | 150 | 81.3% | 24.7% | 40.0% | 0.212 | 0.0% (0/77) | 74.6% | 72.1% | 100.0% | 1138 ms | $0.313 |
+| Qwen3.5-397B-A17B, zero-shot | 150 | 91.3% | 56.7% | 64.7% | 0.596 | 1.3% (1/77) | 89.8% | 92.0% | 100.0% | 1857 ms | $2.008 |
 
 ## Test set: silver (rules-labelled)
 
 ### IN
 
-| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency |
-|---|---|---|---|---|---|---|---|---|---|---|
-| rules only | 590 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/293) | 41.7% | 10.5% | 100.0% | 0 ms |
-| Qwen3.5-4B base, zero-shot | 590 | 87.1% | 61.0% | 73.6% | 0.461 | 29.4% (86/293) | 51.9% | 78.0% | 92.0% | 2980 ms |
-| run1 epoch 1 (tuned 4B) | 590 | 99.5% | 90.8% | 91.4% | 0.892 | 5.1% (15/293) | 92.3% | 84.5% | 99.5% | 3059 ms |
-| run1 epoch 2 (tuned 4B) | 590 | 100.0% | 89.7% | 89.7% | 0.897 | 3.8% (11/293) | 91.7% | 87.5% | 99.5% | 3050 ms |
-| run2 epoch 1 (tuned 4B) | 590 | 100.0% | 94.4% | 94.4% | 0.927 | 4.4% (13/293) | 92.2% | 86.8% | 99.5% | 3144 ms |
-| run1 final, epoch 3 (tuned 4B) | 590 | 100.0% | 89.2% | 89.2% | 0.890 | 4.8% (14/293) | 93.6% | 89.3% | 99.2% | 3068 ms |
-| run2 final, epoch 2 (tuned 4B) | 590 | 100.0% | 94.9% | 94.9% | 0.934 | 4.4% (13/293) | 92.7% | 88.0% | 99.2% | 2795 ms |
+| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency | Cost / 1,000 parcels |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| rules only | 590 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/293) | 41.7% | 10.5% | 100.0% | 0 ms | n/a |
+| Qwen3.5-4B base, zero-shot | 590 | 87.1% | 61.0% | 73.6% | 0.461 | 29.4% (86/293) | 51.9% | 78.0% | 92.0% | 2980 ms | n/a |
+| run1 epoch 1 (tuned 4B) | 590 | 99.5% | 90.8% | 91.4% | 0.892 | 5.1% (15/293) | 92.3% | 84.5% | 99.5% | 3059 ms | n/a |
+| run1 epoch 2 (tuned 4B) | 590 | 100.0% | 89.7% | 89.7% | 0.897 | 3.8% (11/293) | 91.7% | 87.5% | 99.5% | 3050 ms | n/a |
+| run2 epoch 1 (tuned 4B) | 590 | 100.0% | 94.4% | 94.4% | 0.927 | 4.4% (13/293) | 92.2% | 86.8% | 99.5% | 3144 ms | n/a |
+| run1 final, epoch 3 (tuned 4B) | 590 | 100.0% | 89.2% | 89.2% | 0.890 | 4.8% (14/293) | 93.6% | 89.3% | 99.2% | 3068 ms | n/a |
+| run2 final, epoch 2 (tuned 4B) | 590 | 100.0% | 94.9% | 94.9% | 0.934 | 4.4% (13/293) | 92.7% | 88.0% | 99.2% | 2795 ms | n/a |
 
 ### AE
 
-| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency |
-|---|---|---|---|---|---|---|---|---|---|---|
-| rules only | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 91.3% | 91.9% | 100.0% | 0 ms |
-| Qwen3.5-4B base, zero-shot | 334 | 79.3% | 33.2% | 53.9% | 0.262 | 1.5% (3/196) | 71.3% | 71.7% | 100.0% | 2867 ms |
-| run1 epoch 1 (tuned 4B) | 334 | 100.0% | 96.4% | 96.4% | 0.966 | 4.6% (9/196) | 99.7% | 100.0% | 100.0% | 3067 ms |
-| run1 epoch 2 (tuned 4B) | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 99.7% | 100.0% | 100.0% | 3003 ms |
-| run2 epoch 1 (tuned 4B) | 334 | 99.7% | 84.1% | 84.4% | 0.848 | 0.0% (0/196) | 100.0% | 100.0% | 100.0% | 3118 ms |
-| run1 final, epoch 3 (tuned 4B) | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 100.0% | 100.0% | 100.0% | 3003 ms |
-| run2 final, epoch 2 (tuned 4B) | 334 | 100.0% | 99.4% | 99.4% | 0.994 | 1.0% (2/196) | 100.0% | 100.0% | 100.0% | 2758 ms |
+| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | False-DELIVERABLE | Building | Area | Postcode | p50 latency | Cost / 1,000 parcels |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| rules only | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 91.3% | 91.9% | 100.0% | 0 ms | n/a |
+| Qwen3.5-4B base, zero-shot | 334 | 79.3% | 33.2% | 53.9% | 0.262 | 1.5% (3/196) | 71.3% | 71.7% | 100.0% | 2867 ms | n/a |
+| run1 epoch 1 (tuned 4B) | 334 | 100.0% | 96.4% | 96.4% | 0.966 | 4.6% (9/196) | 99.7% | 100.0% | 100.0% | 3067 ms | n/a |
+| run1 epoch 2 (tuned 4B) | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 99.7% | 100.0% | 100.0% | 3003 ms | n/a |
+| run2 epoch 1 (tuned 4B) | 334 | 99.7% | 84.1% | 84.4% | 0.848 | 0.0% (0/196) | 100.0% | 100.0% | 100.0% | 3118 ms | n/a |
+| run1 final, epoch 3 (tuned 4B) | 334 | 100.0% | 100.0% | 100.0% | 1.000 | 0.0% (0/196) | 100.0% | 100.0% | 100.0% | 3003 ms | n/a |
+| run2 final, epoch 2 (tuned 4B) | 334 | 100.0% | 99.4% | 99.4% | 0.994 | 1.0% (2/196) | 100.0% | 100.0% | 100.0% | 2758 ms | n/a |
 
 ## Runs
 
@@ -63,3 +65,8 @@ False-DELIVERABLE rate: share of parcels that should not ship as-is (gold CALL_F
 * 2026-10-17 19:46 UTC `rules only`: rules on gold (blind review, not rules) agreement between the rules and the blind reviewer
 * 2026-10-17 19:47 UTC `Pata, tuned 4B (run 2)`: http:tinker://66ebff6a-2896-584d-9189-64032bad9b83:train:0/sampler_weights/final on gold (blind review, not rules) served through Tinker's OpenAI-compatible endpoint, as on Render
 * 2026-10-17 19:48 UTC `Qwen3.5-4B base, zero-shot`: http:Qwen/Qwen3.5-4B on gold (blind review, not rules) same system prompt plus JSON schema hint, thinking off, via Tinker OpenAI-compatible endpoint
+* 2026-10-17 20:38 UTC `Qwen3.5-397B-A17B, zero-shot`: http:Qwen/Qwen3.5-397B-A17B on gold (blind review, not rules) same family, about 100x the parameters; same prompt plus schema hint, thinking off, via Tinker OpenAI-compatible endpoint
+* 2026-10-18 17:14 UTC `rules only`: rules on gold (blind review, not rules) agreement between the rules and the blind reviewer
+* 2026-10-18 17:15 UTC `Pata, tuned 4B (run 2)`: http:tinker://66ebff6a-2896-584d-9189-64032bad9b83:train:0/sampler_weights/final on gold (blind review, not rules) served through Tinker's OpenAI-compatible endpoint, as on Render; no hedging, tokens recorded
+* 2026-10-18 17:16 UTC `Qwen3.5-4B base, zero-shot`: http:Qwen/Qwen3.5-4B on gold (blind review, not rules) same system prompt plus JSON schema hint, thinking off, via Tinker OpenAI-compatible endpoint; tokens recorded
+* 2026-10-18 17:17 UTC `Qwen3.5-397B-A17B, zero-shot`: http:Qwen/Qwen3.5-397B-A17B on gold (blind review, not rules) same family, about 100x the parameters; same prompt plus schema hint, thinking off, via Tinker OpenAI-compatible endpoint; tokens recorded

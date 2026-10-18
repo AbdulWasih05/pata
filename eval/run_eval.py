@@ -33,6 +33,12 @@ from pata.rules import triage as rules_triage
 from pata.schema import Decision, TriageInput, TriageOutput
 
 TEST = Path("data/splits/test.jsonl")
+# Tinker rate card, USD per million tokens (prefill, sample), from
+# https://tinker-docs.thinkingmachines.ai/tinker/models/ on 18 Oct 2026.
+PRICES = {
+    "Qwen/Qwen3.5-4B": (0.33, 1.005),
+    "Qwen/Qwen3.5-397B-A17B": (1.65, 7.50),
+}
 GOLD = Path("data/gold")
 OUT = Path("eval/out")
 RESULTS_JSONL = Path("eval/results.jsonl")
@@ -72,8 +78,10 @@ def load_test(split: str) -> tuple[list[dict], str]:
 class Backend:
     name = ""
 
-    async def predict(self, inp: TriageInput) -> tuple[str, float]:
-        """Return (raw reply text, latency ms)."""
+    price_model: str | None = None  # key into PRICES
+
+    async def predict(self, inp: TriageInput) -> tuple[str, float, int, int]:
+        """Return (raw reply text, latency ms, input tokens, output tokens)."""
         raise NotImplementedError
 
     async def aclose(self) -> None:
@@ -82,19 +90,24 @@ class Backend:
 
 class RulesBackend(Backend):
     name = "rules"
+    price_model = "rules"
 
     async def predict(self, inp):
         t0 = time.perf_counter()
         out = rules_triage(inp)
-        return out.model_dump_json(), (time.perf_counter() - t0) * 1000
+        return out.model_dump_json(), (time.perf_counter() - t0) * 1000, 0, 0
 
 
 class HttpBackend(Backend):
     def __init__(self, url: str, schema_hint: bool):
         # Generous limits: a hosted baseline may reason before it answers.
+        # No hedging here: cost and latency are measured per single call.
         self.client = ModelClient(url, default_api_key(url), os.environ.get("PATA_MODEL", "pata"),
-                                  schema_hint=schema_hint, max_tokens=4096, timeout=180.0)
+                                  schema_hint=schema_hint, max_tokens=4096, timeout=180.0,
+                                  hedge_ms=0)
         self.name = f"http:{self.client.model}"
+        m = self.client.model
+        self.price_model = BASE_MODEL if m.startswith("tinker://") else m
 
     async def predict(self, inp):
         msgs = build_messages(inp, schema_hint=self.client.schema_hint)
@@ -102,7 +115,7 @@ class HttpBackend(Backend):
         for wait in (5, 15, 45, 90, None):
             try:
                 c = await self.client.complete(msgs)
-                return c.text, c.latency_ms
+                return c.text, c.latency_ms, c.input_tokens, c.output_tokens
             except httpx.HTTPStatusError as e:
                 if wait is None or e.response.status_code not in (429, 500, 502, 503, 504):
                     raise
@@ -131,6 +144,7 @@ class TinkerBackend(Backend):
             self.sampler = sc.create_sampling_client(model_path=checkpoint)
             self.name = f"tuned:{checkpoint}"
         self.schema_hint = schema_hint
+        self.price_model = BASE_MODEL
         self.params = tinker.SamplingParams(
             max_tokens=max_tokens, temperature=0.0, stop=self.renderer.get_stop_sequences()
         )
@@ -141,8 +155,9 @@ class TinkerBackend(Backend):
         res = await self.sampler.sample_async(prompt=prompt, num_samples=1,
                                               sampling_params=self.params)
         ms = (time.perf_counter() - t0) * 1000
-        msg, _ = self.renderer.parse_response(res.sequences[0].tokens)
-        return self.renderers.get_text_content(msg), ms
+        tokens = res.sequences[0].tokens
+        msg, _ = self.renderer.parse_response(tokens)
+        return self.renderers.get_text_content(msg), ms, prompt.length, len(tokens)
 
 
 def make_backend(checkpoint: str, schema_hint: bool | None) -> Backend:
@@ -174,7 +189,20 @@ def macro_f1(pairs: list[tuple[str, str]]) -> float:
     return sum(f1s) / len(f1s)
 
 
-def score(preds: list[dict]) -> dict:
+def cost_per_1000(preds: list[dict], price_model: str | None) -> float | None:
+    """USD per 1,000 parcels at the published rate card; None when tokens were not recorded."""
+    if price_model == "rules":
+        return 0.0
+    called = [p for p in preds if p.get("input_tokens")]
+    if price_model not in PRICES or not called:
+        return None
+    prefill, sample = PRICES[price_model]
+    tin = statistics.mean(p["input_tokens"] for p in called)
+    tout = statistics.mean(p["output_tokens"] for p in called)
+    return (tin * prefill + tout * sample) / 1e6 * 1000
+
+
+def score(preds: list[dict], price_model: str | None = None) -> dict:
     n = len(preds)
     valid = [p for p in preds if p["valid"]]
     pairs = [(p["gold"], p["pred"] or "INVALID") for p in preds]
@@ -197,6 +225,7 @@ def score(preds: list[dict]) -> dict:
         "false_deliverable_n": f"{fd}/{len(not_deliv)}",
         **{f"field_{k}": v for k, v in fields.items()},
         "p50_latency_ms": statistics.median(lat) if lat else 0.0,
+        "cost_per_1000_usd": cost_per_1000(preds, price_model),
         "confusion": dict(Counter(f"{g}->{p}" for g, p in pairs)),
     }
 
@@ -214,10 +243,10 @@ async def run(backend: Backend, rows: list[dict], concurrency: int) -> list[dict
         rules_dec = rules_triage(inp).decision.value
         async with sem:
             try:
-                text, ms = await backend.predict(inp)
+                text, ms, tin, tout = await backend.predict(inp)
                 err = ""
             except Exception as e:  # count a failed call as an invalid answer
-                text, ms, err = "", 0.0, f"{type(e).__name__}: {e}"[:200]
+                text, ms, tin, tout, err = "", 0.0, 0, 0, f"{type(e).__name__}: {e}"[:200]
         out: TriageOutput | None = None
         try:
             out = parse_output(text)
@@ -236,11 +265,17 @@ async def run(backend: Backend, rows: list[dict], concurrency: int) -> list[dict
             "fields": out.normalised.model_dump(mode="json") if out else {},
             "truth": r["output"]["normalised"],
             "latency_ms": ms,
+            "input_tokens": tin,
+            "output_tokens": tout,
             "error": err,
             "reply": text if out is None else "",
         }
 
     return await asyncio.gather(*(one(r) for r in rows))
+
+
+def _usd(v: float | None) -> str:
+    return "n/a" if v is None else f"${v:.3f}"
 
 
 def write_markdown() -> None:
@@ -270,8 +305,9 @@ def write_markdown() -> None:
                 f"### {market}",
                 "",
                 "| System | n | Schema-valid | Accuracy | Acc. w/ fallback | Macro-F1 | "
-                "False-DELIVERABLE | Building | Area | Postcode | p50 latency |",
-                "|---|---|---|---|---|---|---|---|---|---|---|",
+                "False-DELIVERABLE | Building | Area | Postcode | p50 latency | "
+                "Cost / 1,000 parcels |",
+                "|---|---|---|---|---|---|---|---|---|---|---|---|",
             ]
             for v in sorted(rows, key=lambda x: x["date"]):
                 m = v["m"]
@@ -280,7 +316,8 @@ def write_markdown() -> None:
                     f"{m['accuracy_with_fallback']:.1%} | {m['macro_f1']:.3f} | "
                     f"{m['false_deliverable']:.1%} ({m['false_deliverable_n']}) | "
                     f"{m['field_building']:.1%} | {m['field_area']:.1%} | "
-                    f"{m['field_postcode']:.1%} | {m['p50_latency_ms']:.0f} ms |"
+                    f"{m['field_postcode']:.1%} | {m['p50_latency_ms']:.0f} ms | "
+                    f"{_usd(m.get('cost_per_1000_usd'))} |"
                 )
             lines.append("")
     lines += ["## Runs", ""]
@@ -310,11 +347,13 @@ async def amain(args: argparse.Namespace) -> None:
         rows = rows[: args.limit]
     if args.rescore:
         preds = rescore(args.rescore, rows)
+        price_model = None
         backend_name = f"rescored {args.rescore.name}"
         print(f"{backend_name}: {len(preds)} rows of {test_set}")
     else:
         backend = make_backend(args.checkpoint, args.schema_hint)
         backend_name = backend.name
+        price_model = backend.price_model
         print(f"{backend.name} on {len(rows)} rows of {test_set}")
         try:
             preds = await run(backend, rows, args.concurrency)
@@ -331,7 +370,7 @@ async def amain(args: argparse.Namespace) -> None:
             for p in preds:
                 fh.write(json.dumps(p, ensure_ascii=False) + "\n")
 
-    metrics = {m: score([p for p in preds if p["market"] == m])
+    metrics = {m: score([p for p in preds if p["market"] == m], price_model)
                for m in ("IN", "AE") if any(p["market"] == m for p in preds)}
     record = {"date": datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC"), "label": label,
               "backend": backend_name, "test_set": test_set, "note": args.note,

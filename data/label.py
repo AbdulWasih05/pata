@@ -106,11 +106,11 @@ def _write_handcheck(market: str, rows: list[dict]) -> None:
     with path.open("w", encoding="utf-8", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=cols)
         w.writeheader()
-        for i, r in enumerate(rows):
+        for r in rows:
             inp, out = r["input"], r["output"]
             w.writerow({
                 "id": r["id"],
-                "reviewer": "Wasih" if i % 2 == 0 else "Usman",
+                "reviewer": "",
                 "raw_address": inp["raw_address"],
                 "phone_present": inp["phone_present"],
                 "payment": inp["payment"],

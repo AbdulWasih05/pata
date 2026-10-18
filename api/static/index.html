@@ -3,171 +3,310 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pata dispatch triage</title>
-<meta name="description" content="Paste an address, get a dispatch decision before the van leaves.">
+<title>Pata · dispatch triage</title>
+<meta name="description" content="Paste a customer address, get a dispatch decision before the van leaves.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f6f2; --panel: #ffffff; --ink: #1c1b19; --muted: #6b6860; --line: #e2dfd6;
-    --accent: #1f5f8b; --ok: #1e7a46; --ok-bg: #e3f3e9; --call: #9a6200; --call-bg: #fbefd6;
-    --fail: #b3261e; --fail-bg: #fbe3e1;
+    --paper: #fafaf7; --ink: #141413; --soft: #5f5e5a; --faint: #9a9891; --rule: #e4e2db;
+    --field: #ffffff; --focus: #141413;
+    --ok: #2f6b45; --call: #a35d00; --fail: #b02a1e;
+    --serif: "Instrument Serif", Georgia, serif;
+    --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --mono: "Geist Mono", ui-monospace, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #a29f96; --line: #34332f;
-      --accent: #7fb7e0; --ok: #7fd6a0; --ok-bg: #18301f; --call: #f0c06a; --call-bg: #352a12;
-      --fail: #f19a92; --fail-bg: #3a1c1a;
+    :root:not([data-theme="light"]) {
+      --paper: #121211; --ink: #eceae4; --soft: #a8a59d; --faint: #6f6d67; --rule: #2a2927;
+      --field: #191918; --focus: #eceae4; --ok: #7cc79a; --call: #e8a64a; --fail: #ef8a7f;
     }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
-  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
-  .sub { color: var(--muted); margin: 0 0 24px; }
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    padding: 16px; margin-bottom: 16px; }
-  label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 4px; }
-  textarea, input, select { width: 100%; font: inherit; color: var(--ink); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
-  textarea { min-height: 72px; resize: vertical; }
-  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
-    margin-top: 12px; }
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
-  button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
-    border-radius: 6px; padding: 8px 14px; cursor: pointer; }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  @media (prefers-color-scheme: dark) { button.primary { color: #10202c; } }
-  button:disabled { opacity: 0.6; cursor: wait; }
-  .ex { font-size: 13px; padding: 4px 10px; }
-  .muted { color: var(--muted); font-size: 13px; }
-  .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px;
-    border-radius: 999px; white-space: nowrap; }
-  .DELIVERABLE { color: var(--ok); background: var(--ok-bg); }
-  .CALL_FIRST { color: var(--call); background: var(--call-bg); }
-  .LIKELY_FAIL { color: var(--fail); background: var(--fail-bg); }
-  .card h2 { font-size: 18px; margin: 0 0 8px; display: flex; gap: 10px; align-items: center;
-    flex-wrap: wrap; }
-  .note { font-size: 16px; margin: 6px 0; }
-  .codes { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--muted); }
-  dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin: 10px 0 0;
-    font-size: 14px; }
-  dt { color: var(--muted); }
-  dd { margin: 0; overflow-wrap: anywhere; }
-  .scroll { overflow-x: auto; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 15px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  main { max-width: 720px; margin: 0 auto; padding: 72px 24px 96px; }
+  a { color: inherit; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+  a:hover { text-decoration-color: var(--ink); }
+  code, .mono { font-family: var(--mono); font-size: 0.86em; }
+
+  /* masthead */
+  .mast { display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 20px; border-bottom: 1px solid var(--rule); }
+  .brand { font: 400 22px/1 var(--serif); letter-spacing: 0.01em; }
+  .mast nav { font-size: 13px; color: var(--soft); display: flex; gap: 20px; }
+  h1 { font: 400 clamp(40px, 7vw, 60px)/1.04 var(--serif); letter-spacing: -0.015em;
+    margin: 64px 0 20px; }
+  h1 em { font-style: italic; color: var(--soft); }
+  .lede { color: var(--soft); font-size: 17px; max-width: 34em; margin: 0 0 56px; }
+
+  /* sections */
+  .section { padding: 40px 0; border-top: 1px solid var(--rule); }
+  .eyebrow { font: 500 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint); margin: 0 0 20px; display: flex; justify-content: space-between; }
+
+  /* address input */
+  textarea { width: 100%; min-height: 96px; resize: vertical; border: 0; padding: 0;
+    background: transparent; color: var(--ink); font: 400 26px/1.35 var(--serif);
+    outline: none; }
+  textarea::placeholder { color: var(--faint); }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 28px; align-items: center; }
+  .group { display: flex; align-items: center; gap: 10px; }
+  .group > span { font-size: 13px; color: var(--soft); }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px;
+    background: var(--field); }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label { font-size: 13px; padding: 5px 13px; border-radius: 999px; cursor: pointer;
+    color: var(--soft); transition: background .15s, color .15s; user-select: none; }
+  .seg input:checked + label { background: var(--ink); color: var(--paper); }
+  .seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  details { margin-top: 20px; }
+  summary { font-size: 13px; color: var(--soft); cursor: pointer; list-style: none; width: fit-content; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "+ "; font-family: var(--mono); }
+  details[open] summary::before { content: "− "; }
+  .more { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .more label { display: block; font-size: 12px; color: var(--faint); margin-bottom: 6px; }
+  .more input { width: 100%; font: inherit; color: var(--ink); background: var(--field);
+    border: 1px solid var(--rule); border-radius: 8px; padding: 9px 12px; outline: none; }
+  .more input:focus { border-color: var(--ink); }
+
+  .actions { display: flex; align-items: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
+  button { font: 500 14px/1 var(--sans); cursor: pointer; border-radius: 999px; }
+  .primary { background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
+    padding: 12px 22px; transition: opacity .15s; }
+  .primary:hover { opacity: 0.86; }
+  .primary:disabled { opacity: 0.45; cursor: progress; }
+  .kbd { font: 400 12px var(--mono); color: var(--faint); }
+  .tries { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 28px; font-size: 13px;
+    color: var(--faint); }
+  .ex { background: none; border: 0; padding: 0; color: var(--soft); font: 400 13px var(--sans);
+    border-radius: 0; text-decoration: underline; text-decoration-color: var(--rule);
+    text-underline-offset: 4px; }
+  .ex:hover { color: var(--ink); text-decoration-color: var(--ink); }
+
+  /* result slip */
+  #result:empty { display: none; }
+  .slip { animation: rise .35s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .verdict { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex: none; }
+  .verdict .dot { align-self: center; }
+  .word { font: 400 clamp(38px, 6vw, 52px)/1 var(--serif); letter-spacing: -0.01em; }
+  .conf { font: 400 12px var(--mono); color: var(--faint); margin-left: auto; }
+  .DELIVERABLE { --tone: var(--ok); } .CALL_FIRST { --tone: var(--call); } .LIKELY_FAIL { --tone: var(--fail); }
+  .tone { color: var(--tone); } .dot.tone { background: var(--tone); }
+  .note { font-size: 18px; line-height: 1.5; margin: 22px 0 0; max-width: 36em; }
+  .script { margin: 18px 0 0; padding-left: 16px; border-left: 2px solid var(--tone);
+    font: italic 400 19px/1.45 var(--serif); color: var(--soft); }
+  .codes { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 22px;
+    font: 500 11px/1 var(--mono); letter-spacing: 0.08em; color: var(--soft); }
+  dl { display: grid; grid-template-columns: 140px 1fr; margin: 32px 0 0;
+    border-top: 1px solid var(--rule); }
+  dt, dd { padding: 11px 0; border-bottom: 1px solid var(--rule); margin: 0; }
+  dt { font-size: 13px; color: var(--faint); }
+  dd { overflow-wrap: anywhere; }
+  .meta { margin-top: 20px; font: 400 12px var(--mono); color: var(--faint); }
+  .err { color: var(--fail); font-size: 14px; }
+
+  /* csv */
+  .drop { display: block; border: 1px dashed var(--faint); border-radius: 14px; padding: 36px 24px;
+    text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
+  .drop:hover, .drop.over { border-color: var(--ink); background: var(--field); }
+  .drop strong { display: block; font: 400 22px/1.3 var(--serif); }
+  .drop span { font-size: 13px; color: var(--soft); }
+  .drop input { display: none; }
+  .tally { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 32px;
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .tally div { padding: 18px 0; }
+  .tally div + div { padding-left: 20px; border-left: 1px solid var(--rule); }
+  .tally b { display: block; font: 400 40px/1 var(--serif); }
+  .tally span { font-size: 12px; color: var(--soft); }
+  .scroll { overflow-x: auto; margin-top: 24px; }
   table { border-collapse: collapse; width: 100%; font-size: 13px; }
-  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line);
-    vertical-align: top; }
-  th { color: var(--muted); font-weight: 500; }
-  .err { color: var(--fail); }
-  footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
-  a { color: var(--accent); }
+  th { text-align: left; font: 500 11px var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--faint); padding: 0 12px 10px 0; border-bottom: 1px solid var(--rule); }
+  td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  td .dot { margin-right: 8px; width: 7px; height: 7px; }
+  .dl { color: var(--ink); font-size: 13px; }
+
+  footer { margin-top: 24px; padding-top: 28px; border-top: 1px solid var(--rule);
+    font-size: 13px; color: var(--faint); display: flex; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; }
+  #mode { font-family: var(--mono); font-size: 11px; }
+
+  @media (max-width: 560px) {
+    main { padding: 40px 16px 72px; }
+    h1 { margin-top: 44px; }
+    .mast nav { gap: 14px; }
+    textarea { font-size: 22px; }
+    .more { grid-template-columns: 1fr; }
+    dl { grid-template-columns: 100px 1fr; }
+    .tally b { font-size: 32px; }
+    .conf { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slip { animation: none; } }
 </style>
 </head>
 <body>
 <main>
-  <h1>Pata</h1>
-  <p class="sub">Paste a customer address. Get a dispatch decision before the van leaves.</p>
+  <header class="mast">
+    <div class="brand">Pata</div>
+    <nav><a href="#batch">Batch</a><a href="https://github.com/AbdulWasih05/pata">Source</a></nav>
+  </header>
 
-  <section class="panel">
-    <label for="addr">Address, as the customer typed it</label>
-    <textarea id="addr" placeholder="Flat 1203, Marina Pinnacle Tower, Dubai Marina"></textarea>
-    <div class="row">
-      <div><label for="market">Market</label>
-        <select id="market"><option value="AE">UAE</option><option value="IN">India</option></select></div>
-      <div><label for="payment">Payment</label>
-        <select id="payment"><option>PREPAID</option><option>COD</option></select></div>
-      <div><label for="phone">Phone on order</label>
-        <select id="phone"><option value="true">Yes</option><option value="false">No</option></select></div>
-      <div><label for="pin">Declared PIN (India)</label><input id="pin" inputmode="numeric"></div>
-      <div><label for="hint">City hint</label><input id="hint"></div>
+  <h1>Know which parcels will fail <em>before the van leaves.</em></h1>
+  <p class="lede">Paste an address the way the customer typed it. A small fine-tuned model reads it
+    like a dispatcher would and tells you to ship, call first, or hold.</p>
+
+  <section class="section" aria-labelledby="single">
+    <p class="eyebrow" id="single"><span>Address</span><span class="kbd">Ctrl + Enter</span></p>
+    <textarea id="addr" rows="3" placeholder="behind Lulu Hypermarket, Al Barsha, call before coming"
+      aria-label="Address, as the customer typed it"></textarea>
+
+    <div class="controls">
+      <div class="group"><span>Market</span>
+        <div class="seg" role="radiogroup" aria-label="Market">
+          <input type="radio" name="market" id="m-ae" value="AE" checked><label for="m-ae">UAE</label>
+          <input type="radio" name="market" id="m-in" value="IN"><label for="m-in">India</label>
+        </div></div>
+      <div class="group"><span>Payment</span>
+        <div class="seg" role="radiogroup" aria-label="Payment">
+          <input type="radio" name="payment" id="p-cod" value="COD" checked><label for="p-cod">COD</label>
+          <input type="radio" name="payment" id="p-pre" value="PREPAID"><label for="p-pre">Prepaid</label>
+        </div></div>
+      <div class="group"><span>Phone</span>
+        <div class="seg" role="radiogroup" aria-label="Phone on order">
+          <input type="radio" name="phone" id="ph-y" value="true" checked><label for="ph-y">Yes</label>
+          <input type="radio" name="phone" id="ph-n" value="false"><label for="ph-n">No</label>
+        </div></div>
     </div>
+
+    <details>
+      <summary>More detail</summary>
+      <div class="more">
+        <div><label for="pin">Declared PIN (India)</label><input id="pin" inputmode="numeric" autocomplete="off"></div>
+        <div><label for="hint">City hint</label><input id="hint" autocomplete="off"></div>
+      </div>
+    </details>
+
     <div class="actions">
-      <button class="primary" id="go">Triage</button>
-      <span class="muted">Try:</span>
-      <button class="ex" data-m="AE" data-p="COD" data-a="Villa 12, Street 7, Al Barsha 2, Dubai">Villa in Al Barsha</button>
+      <button class="primary" id="go">Triage address</button>
+    </div>
+    <div class="tries"><span>Try</span>
+      <button class="ex" data-m="AE" data-p="COD" data-a="Flat 1203, Marina Pinnacle Tower, Dubai Marina">Marina tower flat</button>
       <button class="ex" data-m="AE" data-p="COD" data-a="behind Lulu Hypermarket Al Barsha, call before coming">Behind Lulu</button>
+      <button class="ex" data-m="AE" data-p="PREPAID" data-a="PO Box 4421, Deira, Dubai">PO Box only</button>
       <button class="ex" data-m="IN" data-p="PREPAID" data-pin="110001" data-a="H.No 45, MG Road, Bengaluru 560001">PIN mismatch</button>
     </div>
   </section>
 
-  <section id="result"></section>
+  <section class="section" id="result" aria-live="polite"></section>
 
-  <section class="panel">
-    <label for="csv">Or upload a CSV of orders (column <code>raw_address</code>; optional
-      <code>market, phone_present, payment, declared_pincode, city_hint</code>)</label>
-    <input type="file" id="csv" accept=".csv,text/csv">
+  <section class="section" id="batch" aria-labelledby="batch-h">
+    <p class="eyebrow" id="batch-h"><span>Batch</span><span>Up to 500 orders</span></p>
+    <label class="drop" id="drop">
+      <input type="file" id="csv" accept=".csv,text/csv">
+      <strong id="dropname">Drop the morning's orders here</strong>
+      <span>A CSV with a <code>raw_address</code> column. Optional: <code>market</code>,
+        <code>phone_present</code>, <code>payment</code>, <code>declared_pincode</code>, <code>city_hint</code>.</span>
+    </label>
     <div class="actions">
       <button class="primary" id="up">Triage CSV</button>
-      <a id="dl" hidden download="triaged.csv">Download triaged.csv</a>
-      <span class="muted" id="upstat"></span>
+      <a class="dl" id="dl" hidden download="triaged.csv">Download triaged.csv</a>
+      <span class="kbd" id="upstat"></span>
     </div>
+    <div id="tally"></div>
     <div class="scroll" id="table"></div>
   </section>
 
-  <footer>Open-weight 4B model fine-tuned for courier triage, with rule-based fallback.
-    UAE examples are synthetic. <a href="https://github.com/AbdulWasih05/pata">Source</a>.
-    <span id="mode"></span></footer>
+  <footer>
+    <span>Qwen3.5-4B, LoRA fine-tuned on Tinker, with a rules fallback. UAE training data is synthetic.</span>
+    <span id="mode"></span>
+  </footer>
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
+const val = (name) => document.querySelector(`input[name="${name}"]:checked`).value;
+const set = (name, v) => { const el = document.querySelector(`input[name="${name}"][value="${v}"]`); if (el) el.checked = true; };
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const chip = (d) => `<span class="chip ${esc(d)}">${esc(d).replace("_", " ")}</span>`;
+const WORD = { DELIVERABLE: "Deliverable", CALL_FIRST: "Call first", LIKELY_FAIL: "Likely to fail" };
+const LABEL = { admin1: "Emirate / state", po_box: "PO Box", postcode: "PIN / postcode" };
+const pretty = (k) => LABEL[k] || k.charAt(0).toUpperCase() + k.slice(1);
 
 fetch("/healthz").then(r => r.json()).then(h => {
-  $("mode").textContent = h.model ? `Model: ${h.model}.` : "Running on rules only.";
+  $("mode").textContent = h.model ? "model online" : "rules only";
 }).catch(() => {});
 
 document.querySelectorAll(".ex").forEach(b => b.onclick = () => {
-  $("addr").value = b.dataset.a; $("market").value = b.dataset.m;
-  $("payment").value = b.dataset.p; $("pin").value = b.dataset.pin || ""; $("hint").value = "";
+  $("addr").value = b.dataset.a; set("market", b.dataset.m); set("payment", b.dataset.p);
+  $("pin").value = b.dataset.pin || ""; $("hint").value = "";
+  if (b.dataset.pin) document.querySelector("details").open = true;
   $("go").click();
 });
+$("addr").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) $("go").click(); });
 
 $("go").onclick = async () => {
   const raw = $("addr").value.trim();
-  if (!raw) return;
-  $("go").disabled = true;
+  if (!raw) { $("addr").focus(); return; }
+  $("go").disabled = true; $("go").textContent = "Reading…";
   try {
     const r = await fetch("/triage", { method: "POST", headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ market: $("market").value, raw_address: raw, payment: $("payment").value,
-        phone_present: $("phone").value === "true", declared_pincode: $("pin").value || null,
+      body: JSON.stringify({ market: val("market"), raw_address: raw, payment: val("payment"),
+        phone_present: val("phone") === "true", declared_pincode: $("pin").value || null,
         city_hint: $("hint").value || null }) });
     const j = await r.json();
-    if (!r.ok) throw new Error(JSON.stringify(j.detail ?? j));
-    const o = j.output, n = o.normalised;
-    const fields = Object.entries(n).filter(([k, v]) => v && k !== "country");
-    $("result").innerHTML = `<div class="panel card">
-      <h2>${chip(o.decision)} <span class="muted">confidence ${o.confidence.toFixed(2)}</span></h2>
+    if (!r.ok) throw new Error(typeof j.detail === "string" ? j.detail : "That input could not be read.");
+    const o = j.output, d = o.decision;
+    const fields = Object.entries(o.normalised).filter(([k, v]) => v && k !== "country");
+    const fb = j.fallback_reason && j.fallback_reason !== "no_model_configured";
+    $("result").innerHTML = `<div class="slip ${d}">
+      <p class="eyebrow"><span>Decision</span></p>
+      <div class="verdict"><span class="dot tone"></span><span class="word tone">${WORD[d] || esc(d)}</span>
+        <span class="conf">confidence ${o.confidence.toFixed(2)}</span></div>
       <p class="note">${esc(o.driver_note)}</p>
-      ${o.call_script ? `<p class="muted">Call script: ${esc(o.call_script)}</p>` : ""}
-      <p class="codes">${o.reason_codes.map(esc).join(" · ")}</p>
-      <dl>${fields.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
-      <p class="muted">${j.source === "model" ? `Model ${esc(j.model)}` : "Rules"}, ${j.latency_ms} ms
-        ${j.fallback_reason && j.fallback_reason !== "no_model_configured" ? ` (fallback: ${esc(j.fallback_reason)})` : ""}</p>
+      ${o.call_script ? `<p class="script">“${esc(o.call_script)}”</p>` : ""}
+      <div class="codes">${o.reason_codes.map(c => `<span>${esc(c)}</span>`).join("")}</div>
+      ${fields.length ? `<dl>${fields.map(([k, v]) => `<dt>${esc(pretty(k))}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : ""}
+      <p class="meta">${j.source === "model" ? "answered by the tuned model" : "answered by the rules"}
+        · ${Math.round(j.latency_ms)} ms${fb ? ` · fallback: ${esc(j.fallback_reason)}` : ""}</p>
     </div>`;
+    $("result").scrollIntoView({ behavior: "smooth", block: "nearest" });
   } catch (e) {
-    $("result").innerHTML = `<p class="panel err">${esc(e.message)}</p>`;
-  } finally { $("go").disabled = false; }
+    $("result").innerHTML = `<p class="err">${esc(e.message)}</p>`;
+  } finally { $("go").disabled = false; $("go").textContent = "Triage address"; }
 };
+
+const drop = $("drop");
+$("csv").onchange = () => { const f = $("csv").files[0]; $("dropname").textContent = f ? f.name : "Drop the morning's orders here"; };
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, () => drop.classList.remove("over")));
+drop.addEventListener("drop", (e) => { e.preventDefault(); $("csv").files = e.dataTransfer.files; $("csv").onchange(); });
 
 $("up").onclick = async () => {
   const f = $("csv").files[0];
-  if (!f) return;
-  $("up").disabled = true; $("upstat").textContent = "Working...";
+  if (!f) { $("csv").click(); return; }
+  $("up").disabled = true; $("upstat").textContent = "working…"; $("tally").innerHTML = ""; $("table").innerHTML = "";
   try {
-    const fd = new FormData(); fd.append("file", f); fd.append("market", $("market").value);
+    const fd = new FormData(); fd.append("file", f); fd.append("market", val("market"));
     const r = await fetch("/triage/csv", { method: "POST", body: fd });
     const text = await r.text();
-    if (!r.ok) throw new Error(text);
+    if (!r.ok) throw new Error("The CSV needs a raw_address column (500 rows at most).");
     $("dl").href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); $("dl").hidden = false;
     const rows = parseCsv(text), head = rows.shift() || [];
-    const show = ["raw_address", "decision", "driver_note", "reason_codes"].map(c => head.indexOf(c));
-    const counts = {};
-    rows.forEach(r => counts[r[show[1]]] = (counts[r[show[1]]] || 0) + 1);
-    $("upstat").textContent = `${rows.length} orders: ` + Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(", ");
-    $("table").innerHTML = `<table><tr><th>Address</th><th>Decision</th><th>Driver note</th><th>Reasons</th></tr>${
-      rows.map(r => `<tr><td>${esc(r[show[0]])}</td><td>${chip(r[show[1]])}</td><td>${esc(r[show[2]])}</td>
-        <td class="codes">${esc(r[show[3]])}</td></tr>`).join("")}</table>`;
+    const ix = ["raw_address", "decision", "driver_note"].map(c => head.indexOf(c));
+    const counts = { DELIVERABLE: 0, CALL_FIRST: 0, LIKELY_FAIL: 0 };
+    rows.forEach(r => counts[r[ix[1]]] = (counts[r[ix[1]]] || 0) + 1);
+    $("upstat").textContent = `${rows.length} orders`;
+    $("tally").innerHTML = `<div class="tally">${Object.entries(counts).map(([k, v]) =>
+      `<div class="${k}"><b class="tone">${v}</b><span>${WORD[k]}</span></div>`).join("")}</div>`;
+    $("table").innerHTML = `<table><thead><tr><th>Address</th><th>Decision</th><th>Driver note</th></tr></thead><tbody>${
+      rows.map(r => `<tr class="${esc(r[ix[1]])}"><td>${esc(r[ix[0]])}</td>
+        <td style="white-space:nowrap"><span class="dot tone"></span>${esc(WORD[r[ix[1]]] || r[ix[1]])}</td>
+        <td>${esc(r[ix[2]])}</td></tr>`).join("")}</tbody></table>`;
   } catch (e) {
     $("upstat").innerHTML = `<span class="err">${esc(e.message)}</span>`;
   } finally { $("up").disabled = false; }
@@ -184,7 +323,7 @@ function parseCsv(t) {
     else cell += c;
   }
   if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows;
+  return rows.filter(r => r.length > 1 || r[0]);
 }
 </script>
 </body>
