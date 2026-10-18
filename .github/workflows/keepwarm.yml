@@ -1,0 +1,12 @@
+# Ping the free Render instance so judges do not hit a cold start (DECISIONS.md D20).
+name: keep-warm
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - run: curl -fsS --max-time 120 https://pata-24o3.onrender.com/healthz
