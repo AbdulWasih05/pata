@@ -133,6 +133,31 @@
   td .dot { margin-right: 8px; width: 7px; height: 7px; }
   .dl { color: var(--ink); font-size: 13px; }
 
+  /* spec sheet: doc header, steps, legend, pipeline */
+  .docid { font: 400 11px/1 var(--mono); letter-spacing: 0.08em; color: var(--faint);
+    display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+  .docid b { font-weight: 500; color: var(--ok); }
+  .eyebrow .n { color: var(--ink); margin-right: 10px; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); }
+  .steps li { padding: 16px 16px 16px 0; font-size: 14px; color: var(--soft); }
+  .steps li + li { padding-left: 16px; border-left: 1px solid var(--rule); }
+  .steps b { display: block; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; color: var(--ink);
+    margin-bottom: 8px; }
+  .legend { margin-top: 24px; }
+  .legend td:first-child { white-space: nowrap; width: 130px; }
+  .legend td:nth-child(2) { color: var(--soft); }
+  .hint { font-size: 12px; color: var(--faint); margin: 14px 0 0; }
+  .hint code { color: var(--soft); }
+  .flow { font: 400 12.5px/1.7 var(--mono); color: var(--soft); background: var(--field);
+    border: 1px solid var(--rule); border-radius: 10px; padding: 18px 20px; overflow-x: auto;
+    white-space: pre; margin: 0; }
+  .flow b { color: var(--ink); font-weight: 500; }
+  .specs { display: grid; grid-template-columns: 140px 1fr; margin: 24px 0 0; }
+  .specs dt, .specs dd { font-size: 13px; }
+  .specs dt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; }
+
   footer { margin-top: 24px; padding-top: 28px; border-top: 1px solid var(--rule);
     font-size: 13px; color: var(--faint); display: flex; justify-content: space-between;
     gap: 16px; flex-wrap: wrap; }
@@ -147,6 +172,9 @@
     dl { grid-template-columns: 100px 1fr; }
     .tally b { font-size: 32px; }
     .conf { margin-left: 0; width: 100%; }
+    .steps { grid-template-columns: 1fr; }
+    .steps li + li { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+    .specs { grid-template-columns: 100px 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { .slip { animation: none; } }
 </style>
@@ -155,15 +183,33 @@
 <main>
   <header class="mast">
     <div class="brand">Pata</div>
-    <nav><a href="#batch">Batch</a><a href="https://github.com/AbdulWasih05/pata">Source</a></nav>
+    <nav><a href="#how">How it works</a><a href="#batch">Batch</a><a href="https://github.com/AbdulWasih05/pata">Source</a></nav>
   </header>
 
   <h1>Know which parcels will fail <em>before the van leaves.</em></h1>
   <p class="lede">Paste an address the way the customer typed it. A small fine-tuned model reads it
     like a dispatcher would and tells you to ship, call first, or hold.</p>
 
+  <section class="section" aria-labelledby="use">
+    <p class="eyebrow" id="use"><span><span class="n">00</span>How to use this page</span><span>3 steps</span></p>
+    <ol class="steps">
+      <li><b>01 PASTE</b>A delivery address, exactly as the customer wrote it. Landmarks and typos are fine.</li>
+      <li><b>02 SET CONTEXT</b>Market, cash on delivery or prepaid, and whether the order has a phone number.</li>
+      <li><b>03 READ</b>One of three decisions, the reasons, a note for the driver, and the address split into parts.</li>
+    </ol>
+    <table class="legend">
+      <thead><tr><th>Decision</th><th>Meaning</th><th>Dispatcher action</th></tr></thead>
+      <tbody>
+        <tr class="DELIVERABLE"><td><span class="dot tone"></span>Deliverable</td><td>A driver can find this.</td><td>Load it.</td></tr>
+        <tr class="CALL_FIRST"><td><span class="dot tone"></span>Call first</td><td>Findable only with the customer's help.</td><td>Phone using the script, then load.</td></tr>
+        <tr class="LIKELY_FAIL"><td><span class="dot tone"></span>Likely to fail</td><td>Wrong or undeliverable as written.</td><td>Hold the parcel.</td></tr>
+      </tbody>
+    </table>
+    <p class="hint">New here? Click one of the <b>Try</b> examples below. Each one shows a different decision.</p>
+  </section>
+
   <section class="section" aria-labelledby="single">
-    <p class="eyebrow" id="single"><span>Address</span><span class="kbd">Ctrl + Enter</span></p>
+    <p class="eyebrow" id="single"><span><span class="n">01</span>Address</span><span class="kbd">Ctrl + Enter</span></p>
     <textarea id="addr" rows="3" placeholder="behind Lulu Hypermarket, Al Barsha, call before coming"
       aria-label="Address, as the customer typed it"></textarea>
 
@@ -184,6 +230,8 @@
           <input type="radio" name="phone" id="ph-n" value="false"><label for="ph-n">No</label>
         </div></div>
     </div>
+    <p class="hint">Context changes the answer: a cash-on-delivery order with a vague address is called first,
+      because a failed trip also means no payment.</p>
 
     <details>
       <summary>More detail</summary>
@@ -207,7 +255,7 @@
   <section class="section" id="result" aria-live="polite"></section>
 
   <section class="section" id="batch" aria-labelledby="batch-h">
-    <p class="eyebrow" id="batch-h"><span>Batch</span><span>Up to 500 orders</span></p>
+    <p class="eyebrow" id="batch-h"><span><span class="n">03</span>Batch</span><span>Up to 500 orders</span></p>
     <label class="drop" id="drop">
       <input type="file" id="csv" accept=".csv,text/csv">
       <strong id="dropname">Drop the morning's orders here</strong>
@@ -219,8 +267,29 @@
       <a class="dl" id="dl" hidden download="triaged.csv">Download triaged.csv</a>
       <span class="kbd" id="upstat"></span>
     </div>
+    <p class="hint">No file handy? <a href="#" id="sample">Download a 6-row sample CSV</a>, then drop it above.
+      Uses the market selected in section 01.</p>
     <div id="tally"></div>
     <div class="scroll" id="table"></div>
+  </section>
+
+  <section class="section" id="how" aria-labelledby="how-h">
+    <p class="eyebrow" id="how-h"><span><span class="n">04</span>How it works</span><span>Per request</span></p>
+<pre class="flow"><b>address + order context</b>
+  │
+  ├─ 1. rules        written dispatcher rules give a first answer
+  ├─ 2. model        fine-tuned Qwen3.5-4B reads the address
+  ├─ 3. schema check reply must be valid JSON in the agreed format
+  │
+  └─ <b>decision</b>     model answer, or the rules answer if 2 or 3 fails</pre>
+    <dl class="specs">
+      <dt>Model</dt><dd>Qwen3.5-4B, LoRA fine-tuned on Tinker (open weights, Apache 2.0)</dd>
+      <dt>Accuracy</dt><dd>86% India, 85% UAE on 150 held-out addresses each</dd>
+      <dt>Reads fields</dt><dd>Finds the building in 90% of Indian addresses, against 47% for rules alone</dd>
+      <dt>Speed</dt><dd>About 1 s per address; slow calls are re-sent after 1.5 s</dd>
+      <dt>Privacy</dt><dd>Addresses are not stored. Traces keep lengths and decisions, not the text.</dd>
+      <dt>Limits</dt><dd>UAE training data is synthetic. No map lookup, so it cannot tell if a building exists.</dd>
+    </dl>
   </section>
 
   <footer>
@@ -238,8 +307,22 @@ const LABEL = { admin1: "Emirate / state", po_box: "PO Box", postcode: "PIN / po
 const pretty = (k) => LABEL[k] || k.charAt(0).toUpperCase() + k.slice(1);
 
 fetch("/healthz").then(r => r.json()).then(h => {
-  $("mode").textContent = h.model ? "model online" : "rules only";
-}).catch(() => {});
+  $("mode").textContent = h.model ? "model online" : "rules only";}).catch(() => {});
+
+const SAMPLE = `raw_address,market,payment,phone_present,declared_pincode
+"Flat 1203, Marina Pinnacle Tower, Dubai Marina",AE,COD,true,
+"behind Lulu Hypermarket Al Barsha, call before coming",AE,COD,true,
+"PO Box 4421, Deira, Dubai",AE,PREPAID,true,
+"Villa 12, Street 4, Al Nahda",AE,COD,false,
+"H.No 45, MG Road, Bengaluru 560001",IN,PREPAID,true,110001
+"Flat 14, Balaji Heights, Kondapur, Hyderabad 500084",IN,COD,true,500084
+`;
+$("sample").onclick = (e) => {
+  e.preventDefault();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([SAMPLE], { type: "text/csv" }));
+  a.download = "pata-sample.csv"; a.click();
+};
 
 document.querySelectorAll(".ex").forEach(b => b.onclick = () => {
   $("addr").value = b.dataset.a; set("market", b.dataset.m); set("payment", b.dataset.p);
@@ -264,7 +347,7 @@ $("go").onclick = async () => {
     const fields = Object.entries(o.normalised).filter(([k, v]) => v && k !== "country");
     const fb = j.fallback_reason && j.fallback_reason !== "no_model_configured";
     $("result").innerHTML = `<div class="slip ${d}">
-      <p class="eyebrow"><span>Decision</span></p>
+      <p class="eyebrow"><span><span class="n">02</span>Decision</span></p>
       <div class="verdict"><span class="dot tone"></span><span class="word tone">${WORD[d] || esc(d)}</span>
         <span class="conf">confidence ${o.confidence.toFixed(2)}</span></div>
       <p class="note">${esc(o.driver_note)}</p>
