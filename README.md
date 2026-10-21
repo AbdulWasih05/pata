@@ -6,7 +6,7 @@ Entry for the DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle. B
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AbdulWasih05/pata)
 
-Live demo: **https://pata-24o3.onrender.com** (free instance; the first request after a quiet spell can take up to a minute). Serving checkpoint: run 2 (see [train/RUNS.md](train/RUNS.md), [eval/results.md](eval/results.md)).
+Live demo: **https://pata-gw9g.onrender.com** (free instance; the first request after a quiet spell can take up to a minute). Serving checkpoint: run 2 (see [train/RUNS.md](train/RUNS.md), [eval/results.md](eval/results.md)).
 
 ## How it works
 
@@ -113,4 +113,4 @@ See [DECISIONS.md](DECISIONS.md).
 
 ## Post-deadline changes
 
-None.
+* 2026-10-21: the original Render account used up its free-tier hours for the month and Render suspended the service at `pata-24o3.onrender.com`. The same code, from the same `render.yaml`, was redeployed to a new free service at `pata-gw9g.onrender.com`. This change updates the live demo link and the keep-warm ping URL only; no code, model or eval changed.

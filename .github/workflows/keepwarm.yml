@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - run: curl -fsS --max-time 120 https://pata-24o3.onrender.com/healthz
+      - run: curl -fsS --max-time 120 https://pata-gw9g.onrender.com/healthz
